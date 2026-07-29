@@ -1,0 +1,16 @@
+@if (organizationService.activeOrganization(); as active) {
+  <button mat-button [matMenuTriggerFor]="menu" class="org-switcher">
+    <span class="org-switcher__name">{{ active.name }}</span>
+    <mat-icon>expand_more</mat-icon>
+  </button>
+} @else {
+  <span class="org-switcher__empty">No organization</span>
+}
+
+<mat-menu #menu="matMenu">
+  @for (org of organizationService.organizations(); track org.id) {
+    <button mat-menu-item (click)="select(org.id)">
+      <span>{{ org.name }}</span>
+    </button>
+  }
+</mat-menu>

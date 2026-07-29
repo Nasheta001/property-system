@@ -1,0 +1,29 @@
+<section class="hero">
+  <div class="hero__content">
+    <span class="hero__eyebrow">Property management, done properly</span>
+    <h1 class="hero__title">Run your entire property portfolio from one calm workspace</h1>
+    <p class="hero__subtitle">
+      Organizations, properties, leases, payments and maintenance — built multi-tenant
+      from day one, so every landlord, manager and tenant sees exactly what they should.
+    </p>
+    <div class="hero__actions">
+      <a mat-flat-button routerLink="/auth/register" class="hero__cta">Get started free</a>
+      <a mat-button routerLink="/auth/login">Sign in</a>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <h2 class="features__title">Everything a property team needs</h2>
+  <div class="features__grid">
+    @for (feature of features; track feature.title) {
+      <div class="feature-card">
+        <div class="feature-card__icon">
+          <mat-icon>{{ feature.icon }}</mat-icon>
+        </div>
+        <h3 class="feature-card__title">{{ feature.title }}</h3>
+        <p class="feature-card__description">{{ feature.description }}</p>
+      </div>
+    }
+  </div>
+</section>

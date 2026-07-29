@@ -1,0 +1,51 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 0 24px;
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border-subtle);
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      color: var(--accent-contrast);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  }
+
+  &__menu-header {
+    padding: 8px 16px;
+  }
+
+  &__menu-name {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  &__menu-email {
+    margin: 2px 0 0;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+}

@@ -1,0 +1,139 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// ---------------------------------------------------------------------------
+// Design tokens
+//
+// A calm, muted palette in the spirit of Stripe / Linear / Notion: mostly
+// neutral grays with a single restrained accent color. Material's M3 theming
+// generates the component-level tokens; the custom `--surface-*` / `--text-*`
+// variables below are for the app shell (sidebar, topbar, cards) that isn't
+// built from Material components directly.
+// ---------------------------------------------------------------------------
+$light-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$violet-palette,
+    tertiary: mat.$blue-palette,
+  ),
+  typography: (
+    plain-family: 'Inter, ui-sans-serif, system-ui, sans-serif',
+    brand-family: 'Inter, ui-sans-serif, system-ui, sans-serif',
+  ),
+  density: (
+    scale: 0,
+  ),
+));
+
+$dark-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$violet-palette,
+    tertiary: mat.$blue-palette,
+  ),
+  typography: (
+    plain-family: 'Inter, ui-sans-serif, system-ui, sans-serif',
+    brand-family: 'Inter, ui-sans-serif, system-ui, sans-serif',
+  ),
+  density: (
+    scale: 0,
+  ),
+));
+
+:root {
+  @include mat.all-component-themes($light-theme);
+
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f7f7f8;
+  --border-subtle: #e5e7eb;
+  --border-default: #d1d5db;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+  --accent: #6d28d9;
+  --accent-contrast: #ffffff;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.08);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  @include mat.all-component-colors($dark-theme);
+
+  --surface: #17181c;
+  --surface-raised: #1e1f24;
+  --surface-sunken: #101114;
+  --border-subtle: #2b2d33;
+  --border-default: #3a3d45;
+  --text-primary: #f3f4f6;
+  --text-secondary: #b3b6bd;
+  --text-muted: #71747c;
+  --accent: #a78bfa;
+  --accent-contrast: #17181c;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 16px -2px rgb(0 0 0 / 0.5);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']):not([data-theme='dark']) {
+    @include mat.all-component-colors($dark-theme);
+
+    --surface: #17181c;
+    --surface-raised: #1e1f24;
+    --surface-sunken: #101114;
+    --border-subtle: #2b2d33;
+    --border-default: #3a3d45;
+    --text-primary: #f3f4f6;
+    --text-secondary: #b3b6bd;
+    --text-muted: #71747c;
+    --accent: #a78bfa;
+    --accent-contrast: #17181c;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 16px -2px rgb(0 0 0 / 0.5);
+
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--surface-sunken);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-default);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}

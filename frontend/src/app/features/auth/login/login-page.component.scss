@@ -1,0 +1,33 @@
+@use '../../../shared/styles/auth' as auth;
+
+.auth-page {
+  @include auth.auth-page;
+}
+
+.auth-card {
+  @include auth.auth-card;
+
+  &__title {
+    @include auth.auth-card-title;
+  }
+
+  &__subtitle {
+    @include auth.auth-card-subtitle;
+  }
+
+  &__footer {
+    @include auth.auth-card-footer;
+  }
+}
+
+.auth-form {
+  @include auth.auth-form;
+
+  &__error {
+    @include auth.auth-form-error;
+  }
+
+  &__submit {
+    @include auth.auth-form-submit;
+  }
+}

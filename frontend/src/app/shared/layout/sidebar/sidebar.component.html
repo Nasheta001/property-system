@@ -1,0 +1,21 @@
+<nav class="sidebar">
+  <div class="sidebar__brand">
+    <span class="sidebar__brand-mark">PS</span>
+    <span class="sidebar__brand-name">Property System</span>
+  </div>
+
+  <ul class="sidebar__nav">
+    @for (item of navItems; track item.route) {
+      <li>
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="sidebar__link--active"
+          class="sidebar__link"
+        >
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span>{{ item.label }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

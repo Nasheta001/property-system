@@ -1,0 +1,32 @@
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  height: 100vh;
+
+  &__sidebar {
+    min-height: 0;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px;
+    background-color: var(--surface-sunken);
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+
+    &__sidebar {
+      display: none;
+    }
+  }
+}

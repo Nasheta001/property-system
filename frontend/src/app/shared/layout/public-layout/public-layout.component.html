@@ -1,0 +1,22 @@
+<div class="public-layout">
+  <header class="public-layout__header">
+    <a routerLink="/" class="public-layout__brand">
+      <span class="public-layout__brand-mark">PS</span>
+      <span>Property System</span>
+    </a>
+
+    <div class="public-layout__actions">
+      <app-theme-toggle />
+      <a mat-button routerLink="/auth/login">Sign in</a>
+      <a mat-flat-button routerLink="/auth/register">Get started</a>
+    </div>
+  </header>
+
+  <main class="public-layout__content">
+    <router-outlet />
+  </main>
+
+  <footer class="public-layout__footer">
+    <span>&copy; {{ year }} Property System</span>
+  </footer>
+</div>

@@ -1,0 +1,40 @@
+@use '../../../shared/styles/auth' as auth;
+
+.auth-page {
+  @include auth.auth-page;
+}
+
+.auth-card {
+  @include auth.auth-card;
+  max-width: 440px;
+
+  &__title {
+    @include auth.auth-card-title;
+  }
+
+  &__subtitle {
+    @include auth.auth-card-subtitle;
+  }
+
+  &__footer {
+    @include auth.auth-card-footer;
+  }
+}
+
+.auth-form {
+  @include auth.auth-form;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  &__error {
+    @include auth.auth-form-error;
+  }
+
+  &__submit {
+    @include auth.auth-form-submit;
+  }
+}

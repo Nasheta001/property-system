@@ -1,0 +1,12 @@
+<div class="stat-card">
+  <div class="stat-card__icon">
+    <mat-icon>{{ icon() }}</mat-icon>
+  </div>
+  <div class="stat-card__body">
+    <p class="stat-card__label">{{ label() }}</p>
+    <p class="stat-card__value">{{ value() }}</p>
+    @if (hint()) {
+      <p class="stat-card__hint">{{ hint() }}</p>
+    }
+  </div>
+</div>

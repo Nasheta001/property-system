@@ -1,0 +1,86 @@
+@if (organizationService.activeOrganization(); as org) {
+  <div class="dashboard">
+    <header class="dashboard__header">
+      <h1 class="dashboard__title">{{ org.name }}</h1>
+      <p class="dashboard__subtitle">Here's what's happening across your portfolio.</p>
+    </header>
+
+    @if (isLoading()) {
+      <div class="dashboard__loading">
+        <mat-spinner diameter="32" />
+      </div>
+    } @else {
+      <div class="dashboard__stats">
+        <app-stat-card label="Properties" [value]="propertiesCount()" icon="apartment" />
+        <app-stat-card label="Total units" [value]="totalUnitsCount()" icon="door_front" />
+        <app-stat-card label="Vacant units" [value]="vacantUnitsCount()" icon="key" hint="Ready to lease" />
+        <app-stat-card label="Occupied units" [value]="occupiedUnitsCount()" icon="groups" />
+      </div>
+
+      <section class="dashboard__section">
+        <h2 class="dashboard__section-title">Recent properties</h2>
+
+        @if (recentProperties().length === 0) {
+          <p class="dashboard__empty">No properties yet.</p>
+        } @else {
+          <div class="property-table">
+            <div class="property-table__row property-table__row--head">
+              <span>Name</span>
+              <span>Type</span>
+              <span>City</span>
+              <span>Buildings</span>
+            </div>
+            @for (property of recentProperties(); track property.id) {
+              <div class="property-table__row">
+                <span>{{ property.name }}</span>
+                <span class="property-table__badge">{{ property.property_type }}</span>
+                <span>{{ property.city || '—' }}</span>
+                <span>{{ property.building_count }}</span>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    }
+  </div>
+} @else {
+  <div class="onboarding">
+    <div class="onboarding-card">
+      <h1 class="onboarding-card__title">Create your organization</h1>
+      <p class="onboarding-card__subtitle">
+        Everything in Property System — properties, tenants, leases, payments — belongs
+        to an organization. Create yours to get started.
+      </p>
+
+      <form [formGroup]="createOrgForm" (ngSubmit)="createOrganization()" class="onboarding-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Organization name</mat-label>
+          <input matInput formControlName="name" placeholder="e.g. Green Holdings" />
+        </mat-form-field>
+
+        <div class="onboarding-form__row">
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="city" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Country</mat-label>
+            <input matInput formControlName="country" />
+          </mat-form-field>
+        </div>
+
+        @if (createOrgError()) {
+          <p class="onboarding-form__error">{{ createOrgError() }}</p>
+        }
+
+        <button mat-flat-button type="submit" class="onboarding-form__submit" [disabled]="isCreatingOrg()">
+          @if (isCreatingOrg()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            Create organization
+          }
+        </button>
+      </form>
+    </div>
+  </div>
+}

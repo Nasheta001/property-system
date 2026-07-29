@@ -1,0 +1,22 @@
+<header class="topbar">
+  <app-org-switcher />
+
+  <div class="topbar__actions">
+    <app-theme-toggle />
+
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="topbar__avatar" aria-label="Account menu">
+      <span>{{ initials() }}</span>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <div class="topbar__menu-header">
+        <p class="topbar__menu-name">{{ currentUser()?.full_name }}</p>
+        <p class="topbar__menu-email">{{ currentUser()?.email }}</p>
+      </div>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Sign out</span>
+      </button>
+    </mat-menu>
+  </div>
+</header>
