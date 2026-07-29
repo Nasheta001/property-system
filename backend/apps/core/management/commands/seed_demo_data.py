@@ -14,6 +14,7 @@ from apps.organizations.models import Membership, Organization
 from apps.payments.models import Payment
 from apps.payments.services import mark_payment_paid
 from apps.properties.models import Building, Floor, Property, Unit
+from apps.support.models import SupportTicket
 from apps.tenants.models import TenantProfile
 from apps.users.models import User
 
@@ -234,6 +235,19 @@ class Command(BaseCommand):
                 ContentFile(b"%PDF-1.4\n% Demo placeholder lease agreement.\n"),
                 save=True,
             )
+
+        # --- Support -----------------------------------------------------
+        SupportTicket.objects.get_or_create(
+            organization=organization,
+            subject="How do I add a second property?",
+            defaults={
+                "description": "We're expanding to a second building across town and want to set it up correctly.",
+                "category": SupportTicket.Category.OTHER,
+                "priority": SupportTicket.Priority.LOW,
+                "created_by": manager,
+                "updated_by": manager,
+            },
+        )
 
         self.stdout.write(self.style.SUCCESS("Demo data seeded successfully."))
         self.stdout.write(f"  Organization: {organization.name} ({organization.slug})")

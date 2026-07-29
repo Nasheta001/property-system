@@ -1,0 +1,54 @@
+<div class="support-page">
+  <header class="support-page__header">
+    <div>
+      <h1 class="support-page__title">Support</h1>
+      <p class="support-page__subtitle">Questions and issues you've raised with the Property System team.</p>
+    </div>
+    <button mat-flat-button class="support-page__add" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      New ticket
+    </button>
+  </header>
+
+  <div class="support-page__toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [formControl]="statusControl">
+        @for (option of statusOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (isLoading()) {
+    <div class="support-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else if (tickets().length === 0) {
+    <div class="support-page__empty">No tickets match this filter.</div>
+  } @else {
+    <div class="data-table">
+      <div class="data-table__row data-table__row--head">
+        <span>Subject</span>
+        <span>Category</span>
+        <span>Priority</span>
+        <span>Status</span>
+        <span>Replies</span>
+      </div>
+      @for (ticket of tickets(); track ticket.id) {
+        <div class="data-table__row data-table__row--clickable" (click)="openDetail(ticket)">
+          <span class="data-table__primary">{{ ticket.subject }}</span>
+          <span class="data-table__secondary">{{ ticket.category.replace('_', ' ') }}</span>
+          <span class="data-table__secondary">{{ ticket.priority }}</span>
+          <span>
+            <span class="status-badge" [class]="'status-badge--' + statusTone(ticket.status)">
+              {{ ticket.status.replace('_', ' ') }}
+            </span>
+          </span>
+          <span>{{ ticket.comment_count }}</span>
+        </div>
+      }
+    </div>
+  }
+</div>

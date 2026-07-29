@@ -1,0 +1,31 @@
+.ticket-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 440px;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  &__submit {
+    background-color: var(--accent) !important;
+    color: var(--accent-contrast) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .ticket-form {
+    min-width: 0;
+
+    &__row {
+      grid-template-columns: 1fr;
+    }
+  }
+}

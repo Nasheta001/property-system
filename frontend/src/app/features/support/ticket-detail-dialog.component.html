@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>{{ ticket().subject }}</h2>
+
+<mat-dialog-content class="ticket-detail">
+  <div class="ticket-detail__meta">
+    <span class="ticket-detail__meta-item"><strong>Category</strong> {{ ticket().category.replace('_', ' ') }}</span>
+    <span class="ticket-detail__meta-item"><strong>Priority</strong> {{ ticket().priority }}</span>
+    <span class="ticket-detail__meta-item"><strong>Status</strong> {{ ticket().status.replace('_', ' ') }}</span>
+    @if (ticket().assigned_to_name) {
+      <span class="ticket-detail__meta-item"><strong>Assigned to</strong> {{ ticket().assigned_to_name }}</span>
+    }
+  </div>
+
+  <p class="ticket-detail__description">{{ ticket().description }}</p>
+
+  <button
+    mat-stroked-button
+    class="ticket-detail__toggle"
+    [disabled]="isSubmitting()"
+    (click)="toggleStatus()"
+  >
+    {{ ticket().status === 'closed' ? 'Reopen ticket' : 'Close ticket' }}
+  </button>
+
+  <section class="ticket-detail__section">
+    <h3 class="ticket-detail__section-title">Conversation</h3>
+
+    @if (isLoading()) {
+      <div class="ticket-detail__loading">
+        <mat-spinner diameter="24" />
+      </div>
+    } @else if (comments().length === 0) {
+      <p class="ticket-detail__empty">No replies yet.</p>
+    } @else {
+      <ul class="ticket-detail__comments">
+        @for (comment of comments(); track comment.id) {
+          <li>
+            <span class="ticket-detail__comment-author">{{ comment.author_name || 'Unknown' }}</span>
+            <p class="ticket-detail__comment-body">{{ comment.body }}</p>
+          </li>
+        }
+      </ul>
+    }
+
+    <form [formGroup]="commentForm" class="ticket-detail__comment-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Add a reply</mat-label>
+        <textarea matInput formControlName="body" rows="2"></textarea>
+      </mat-form-field>
+      <button mat-stroked-button (click)="addComment()">Post reply</button>
+    </form>
+  </section>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dismiss()">Done</button>
+</mat-dialog-actions>

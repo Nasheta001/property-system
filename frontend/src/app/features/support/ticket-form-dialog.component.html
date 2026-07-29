@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>New support ticket</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="ticket-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Subject</mat-label>
+      <input matInput formControlName="subject" placeholder="e.g. Can't upload a document" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="4"></textarea>
+    </mat-form-field>
+
+    <div class="ticket-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category">
+          <mat-option value="billing">Billing</mat-option>
+          <mat-option value="technical">Technical</mat-option>
+          <mat-option value="feature_request">Feature Request</mat-option>
+          <mat-option value="bug_report">Bug Report</mat-option>
+          <mat-option value="other">Other</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority">
+          <mat-option value="low">Low</mat-option>
+          <mat-option value="medium">Medium</mat-option>
+          <mat-option value="high">High</mat-option>
+          <mat-option value="urgent">Urgent</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button class="ticket-form__submit" (click)="submit()">Submit ticket</button>
+</mat-dialog-actions>

@@ -90,6 +90,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/reports/reports-page.component').then((m) => m.ReportsPageComponent),
       },
+      {
+        path: 'support',
+        loadComponent: () =>
+          import('./features/support/support-page.component').then((m) => m.SupportPageComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
