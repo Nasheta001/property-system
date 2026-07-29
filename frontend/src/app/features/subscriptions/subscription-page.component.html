@@ -1,0 +1,88 @@
+<div class="subscription-page">
+  <header class="subscription-page__header">
+    <div>
+      <h1 class="subscription-page__title">Subscription</h1>
+      <p class="subscription-page__subtitle">Your organization's plan, usage, and billing history.</p>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <div class="subscription-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else if (current()) {
+    <section class="usage-card">
+      <div class="usage-card__header">
+        <span class="usage-card__label">Current plan</span>
+        <span class="usage-card__plan">{{ current()!.plan.name }}</span>
+      </div>
+      <div class="usage-rows">
+        @for (row of usageRows(); track row.label) {
+          <div class="usage-row">
+            <div class="usage-row__labels">
+              <span class="usage-row__name">{{ row.label }}</span>
+              <span class="usage-row__stat" [class.usage-row__stat--over]="row.overLimit">
+                {{ row.used }} / {{ formatLimit(row.limit) }}
+              </span>
+            </div>
+            <div class="usage-row__track">
+              <div
+                class="usage-row__fill"
+                [class.usage-row__fill--over]="row.overLimit"
+                [style.width.%]="row.limit ? row.percent : 6"
+              ></div>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <div class="plans-grid">
+      @for (plan of plans(); track plan.code) {
+        <div class="plan-card" [class.plan-card--current]="plan.code === current()!.plan.code">
+          <div class="plan-card__header">
+            <h2 class="plan-card__name">{{ plan.name }}</h2>
+            @if (plan.code === current()!.plan.code) {
+              <span class="plan-card__badge">Current</span>
+            }
+          </div>
+          <p class="plan-card__price">{{ formatPrice(plan) }}</p>
+          <ul class="plan-card__features">
+            @for (feature of plan.features; track feature) {
+              <li>
+                <mat-icon>check</mat-icon>
+                {{ feature }}
+              </li>
+            }
+          </ul>
+          @if (canManage() && plan.code !== current()!.plan.code) {
+            <button mat-stroked-button class="plan-card__action" (click)="switchPlan(plan)">
+              Switch to {{ plan.name }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <section class="history-card">
+      <h2 class="history-card__title">Plan history</h2>
+      @if (events().length === 0) {
+        <p class="history-card__empty">No plan changes yet.</p>
+      } @else {
+        <ul class="history-list">
+          @for (event of events(); track event.id) {
+            <li class="history-list__item">
+              <span class="history-list__change">{{ event.previous_plan }} → {{ event.new_plan }}</span>
+              <span class="history-list__meta">
+                {{ event.changed_by_name || 'Unknown' }} · {{ event.created_at | date: 'mediumDate' }}
+              </span>
+              @if (event.reason) {
+                <span class="history-list__reason">{{ event.reason }}</span>
+              }
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  }
+</div>

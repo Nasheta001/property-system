@@ -100,6 +100,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/calendar/calendar-page.component').then((m) => m.CalendarPageComponent),
       },
+      {
+        path: 'subscription',
+        loadComponent: () =>
+          import('./features/subscriptions/subscription-page.component').then(
+            (m) => m.SubscriptionPageComponent
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
