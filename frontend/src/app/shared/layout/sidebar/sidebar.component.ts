@@ -19,5 +19,6 @@ export class SidebarComponent {
     { label: 'Dashboard', icon: 'space_dashboard', route: '/dashboard' },
     { label: 'Tenants', icon: 'groups', route: '/tenants' },
     { label: 'Leases', icon: 'description', route: '/leases' },
+    { label: 'Payments', icon: 'payments', route: '/payments' },
   ];
 }

@@ -1,0 +1,16 @@
+.reason-dialog__message {
+  margin: 0 0 12px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.reason-dialog__danger {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+mat-form-field {
+  width: 100%;
+  min-width: 360px;
+}

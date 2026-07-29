@@ -1,0 +1,80 @@
+<div class="payments-page">
+  <header class="payments-page__header">
+    <div>
+      <h1 class="payments-page__title">Payments</h1>
+      <p class="payments-page__subtitle">Rent payments recorded across your portfolio.</p>
+    </div>
+    <button mat-flat-button class="payments-page__add" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Record payment
+    </button>
+  </header>
+
+  <div class="payments-page__toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [formControl]="statusControl">
+        @for (option of statusOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (isLoading()) {
+    <div class="payments-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else if (payments().length === 0) {
+    <div class="payments-page__empty">No payments match this filter.</div>
+  } @else {
+    <div class="data-table">
+      <div class="data-table__row data-table__row--head">
+        <span>Tenant</span>
+        <span>Unit</span>
+        <span>Amount</span>
+        <span>Method</span>
+        <span>Receipt</span>
+        <span>Status</span>
+        <span></span>
+      </div>
+      @for (payment of payments(); track payment.id) {
+        <div class="data-table__row">
+          <span class="data-table__primary">{{ payment.tenant_name }}</span>
+          <span>{{ payment.unit_number }}</span>
+          <span>{{ payment.amount | number: '1.0-0' }}</span>
+          <span class="data-table__secondary">{{ payment.method.replace('_', ' ') }}</span>
+          <span class="data-table__secondary">{{ payment.receipt_number || '—' }}</span>
+          <span>
+            <span class="status-badge" [class]="'status-badge--' + statusTone(payment.status)">
+              {{ payment.status }}
+            </span>
+          </span>
+          <span class="data-table__actions">
+            @if (canMarkPaid(payment)) {
+              <button mat-icon-button (click)="markPaid(payment)" aria-label="Mark paid" title="Mark paid">
+                <mat-icon>check_circle</mat-icon>
+              </button>
+              <button mat-icon-button (click)="markFailed(payment)" aria-label="Mark failed" title="Mark failed">
+                <mat-icon>error</mat-icon>
+              </button>
+              <button mat-icon-button (click)="cancel(payment)" aria-label="Cancel payment" title="Cancel">
+                <mat-icon>block</mat-icon>
+              </button>
+            }
+            @if (canRefund(payment)) {
+              <button mat-icon-button (click)="refund(payment)" aria-label="Refund payment" title="Refund">
+                <mat-icon>undo</mat-icon>
+              </button>
+            }
+            @if (canDelete(payment)) {
+              <button mat-icon-button (click)="deletePayment(payment)" aria-label="Delete payment" title="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

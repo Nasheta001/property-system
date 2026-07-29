@@ -1,0 +1,46 @@
+.payment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 420px;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  &__hint {
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background-color: color-mix(in srgb, #f59e0b 14%, transparent);
+    color: #b45309;
+    font-size: 0.8125rem;
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+  }
+
+  &__submit {
+    background-color: var(--accent) !important;
+    color: var(--accent-contrast) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .payment-form {
+    min-width: 0;
+
+    &__row {
+      grid-template-columns: 1fr;
+    }
+  }
+}

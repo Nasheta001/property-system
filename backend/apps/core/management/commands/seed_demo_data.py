@@ -7,6 +7,8 @@ from django.utils import timezone
 from apps.leases.models import Lease
 from apps.leases.services import activate_lease
 from apps.organizations.models import Membership, Organization
+from apps.payments.models import Payment
+from apps.payments.services import mark_payment_paid
 from apps.properties.models import Building, Floor, Property, Unit
 from apps.tenants.models import TenantProfile
 from apps.users.models import User
@@ -161,6 +163,18 @@ class Command(BaseCommand):
             )
             if lease_created:
                 activate_lease(lease, owner)
+
+            if lease.status == Lease.Status.ACTIVE and not lease.payments.exists():
+                payment = Payment.objects.create(
+                    organization=organization,
+                    lease=lease,
+                    tenant=tenant,
+                    amount=lease.rent_amount,
+                    method=Payment.Method.MPESA,
+                    payment_date=timezone.now().date(),
+                    created_by=owner,
+                )
+                mark_payment_paid(payment, owner, provider_reference="DEMO-MPESA-REF")
 
         self.stdout.write(self.style.SUCCESS("Demo data seeded successfully."))
         self.stdout.write(f"  Organization: {organization.name} ({organization.slug})")

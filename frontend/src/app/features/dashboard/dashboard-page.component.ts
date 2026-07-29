@@ -8,6 +8,7 @@ import { forkJoin } from 'rxjs';
 
 import { LeasesService } from '../../core/services/leases.service';
 import { OrganizationService } from '../../core/services/organization.service';
+import { PaymentsService } from '../../core/services/payments.service';
 import { PropertiesService } from '../../core/services/properties.service';
 import { Property } from '../../core/models/property.model';
 import { StatCardComponent } from '../../shared/ui/stat-card/stat-card.component';
@@ -28,6 +29,7 @@ import { StatCardComponent } from '../../shared/ui/stat-card/stat-card.component
 export class DashboardPageComponent implements OnInit {
   private readonly propertiesService = inject(PropertiesService);
   private readonly leasesService = inject(LeasesService);
+  private readonly paymentsService = inject(PaymentsService);
   private readonly fb = inject(FormBuilder);
   protected readonly organizationService = inject(OrganizationService);
 
@@ -37,6 +39,7 @@ export class DashboardPageComponent implements OnInit {
   protected readonly vacantUnitsCount = signal(0);
   protected readonly occupiedUnitsCount = signal(0);
   protected readonly activeLeasesCount = signal(0);
+  protected readonly paidPaymentsCount = signal(0);
   protected readonly recentProperties = signal<Property[]>([]);
 
   protected readonly isCreatingOrg = signal(false);
@@ -63,14 +66,16 @@ export class DashboardPageComponent implements OnInit {
       vacant: this.propertiesService.listUnits({ page_size: 1, status: 'vacant' }),
       occupied: this.propertiesService.listUnits({ page_size: 1, status: 'occupied' }),
       activeLeases: this.leasesService.list({ page_size: 1, status: 'active' }),
+      paidPayments: this.paymentsService.list({ page_size: 1, status: 'paid' }),
     }).subscribe({
-      next: ({ properties, units, vacant, occupied, activeLeases }) => {
+      next: ({ properties, units, vacant, occupied, activeLeases, paidPayments }) => {
         this.propertiesCount.set(properties.count);
         this.recentProperties.set(properties.results);
         this.totalUnitsCount.set(units.count);
         this.vacantUnitsCount.set(vacant.count);
         this.occupiedUnitsCount.set(occupied.count);
         this.activeLeasesCount.set(activeLeases.count);
+        this.paidPaymentsCount.set(paidPayments.count);
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false),

@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>Record payment</h2>
+
+<mat-dialog-content>
+  @if (isLoadingLeases()) {
+    <div class="payment-form__loading">
+      <mat-spinner diameter="28" />
+    </div>
+  } @else {
+    <form [formGroup]="form" class="payment-form">
+      @if (activeLeases().length === 0) {
+        <p class="payment-form__hint">No active leases yet. Activate a lease before recording payments.</p>
+      }
+
+      <mat-form-field appearance="outline">
+        <mat-label>Lease</mat-label>
+        <mat-select formControlName="lease" (selectionChange)="onLeaseSelected($event.value)">
+          @for (lease of activeLeases(); track lease.id) {
+            <mat-option [value]="lease.id">{{ lease.unit_number }} — {{ lease.tenant_name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="payment-form__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Amount</mat-label>
+          <input matInput type="number" formControlName="amount" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Method</mat-label>
+          <mat-select formControlName="method">
+            <mat-option value="mpesa">M-Pesa</mat-option>
+            <mat-option value="card">Card</mat-option>
+            <mat-option value="bank_transfer">Bank Transfer</mat-option>
+            <mat-option value="cash">Cash</mat-option>
+            <mat-option value="other">Other</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Payment date</mat-label>
+        <input matInput type="date" formControlName="payment_date" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Notes</mat-label>
+        <textarea matInput formControlName="notes" rows="2"></textarea>
+      </mat-form-field>
+    </form>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button
+    mat-flat-button
+    class="payment-form__submit"
+    [disabled]="isLoadingLeases() || activeLeases().length === 0"
+    (click)="submit()"
+  >
+    Record payment
+  </button>
+</mat-dialog-actions>

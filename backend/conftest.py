@@ -110,3 +110,20 @@ def tenant_profile(organization, owner_user):
         email="amina.hassan@example.com",
         created_by=owner_user,
     )
+
+
+@pytest.fixture
+def active_lease(unit, tenant_profile, owner_user):
+    from apps.leases.models import Lease
+    from apps.leases.services import activate_lease
+
+    lease = Lease.objects.create(
+        organization=unit.organization,
+        unit=unit,
+        tenant=tenant_profile,
+        start_date="2026-01-01",
+        rent_amount=unit.rent_amount,
+        deposit_amount=unit.deposit_amount,
+        created_by=owner_user,
+    )
+    return activate_lease(lease, owner_user)

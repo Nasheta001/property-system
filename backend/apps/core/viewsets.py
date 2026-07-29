@@ -36,3 +36,18 @@ class TenantScopedModelViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         instance.delete(hard=False)
+
+
+class TenantScopedReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
+    """Read-only counterpart to `TenantScopedModelViewSet`, for endpoints
+    backed by rows that are never written through the API — e.g. an
+    append-only ledger populated exclusively by domain services.
+    """
+
+    permission_classes = [IsOrganizationMember]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if getattr(self, "swagger_fake_view", False) or self.request.organization is None:
+            return queryset.none()
+        return queryset.filter(organization=self.request.organization)
