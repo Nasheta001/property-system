@@ -28,7 +28,7 @@ export interface Property {
 
 export type PropertyPayload = Pick<
   Property,
-  'name' | 'property_type' | 'description' | 'address' | 'city' | 'country' | 'is_active'
+  'name' | 'property_type' | 'description' | 'address' | 'city' | 'country' | 'is_active' | 'latitude' | 'longitude'
 >;
 
 export interface Building {

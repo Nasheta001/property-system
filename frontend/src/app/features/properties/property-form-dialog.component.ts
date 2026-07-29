@@ -26,6 +26,8 @@ export class PropertyFormDialogComponent {
     address: [this.property?.address ?? ''],
     city: [this.property?.city ?? ''],
     country: [this.property?.country ?? ''],
+    latitude: [this.property?.latitude ?? '', [Validators.pattern(/^-?\d{1,3}(\.\d+)?$/)]],
+    longitude: [this.property?.longitude ?? '', [Validators.pattern(/^-?\d{1,3}(\.\d+)?$/)]],
     is_active: [this.property?.is_active ?? true],
   });
 
@@ -34,7 +36,12 @@ export class PropertyFormDialogComponent {
       this.form.markAllAsTouched();
       return;
     }
-    this.dialogRef.close(this.form.getRawValue());
+    const value = this.form.getRawValue();
+    this.dialogRef.close({
+      ...value,
+      latitude: value.latitude.trim() || null,
+      longitude: value.longitude.trim() || null,
+    });
   }
 
   cancel(): void {

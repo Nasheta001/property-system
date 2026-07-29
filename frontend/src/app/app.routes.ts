@@ -118,6 +118,10 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/assistant/assistant-page.component').then((m) => m.AssistantPageComponent),
       },
+      {
+        path: 'maps',
+        loadComponent: () => import('./features/maps/maps-page.component').then((m) => m.MapsPageComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

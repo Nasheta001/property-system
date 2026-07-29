@@ -1,0 +1,52 @@
+<div class="maps-page">
+  <header class="maps-page__header">
+    <div>
+      <h1 class="maps-page__title">Maps</h1>
+      <p class="maps-page__subtitle">Every property with a location, plotted on one map.</p>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <div class="maps-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else {
+    @if (tilesUnavailable()) {
+      <div class="maps-page__banner">
+        <mat-icon>info</mat-icon>
+        Map tiles couldn't be reached from this environment — the property list below still works.
+      </div>
+    }
+
+    @if (pinnedProperties.length > 0) {
+      <div class="maps-page__map" #mapContainer></div>
+    } @else {
+      <div class="maps-page__empty">
+        <mat-icon>location_off</mat-icon>
+        <p>No properties have a location yet. Add latitude/longitude on a property to see it here.</p>
+      </div>
+    }
+
+    <div class="maps-page__list">
+      <h2 class="maps-page__list-title">Properties</h2>
+      <ul class="property-list">
+        @for (property of properties(); track property.id) {
+          <li
+            class="property-list__item"
+            [class.property-list__item--active]="property.id === highlightedId()"
+            [class.property-list__item--unlocated]="property.latitude === null || property.longitude === null"
+            (click)="focusProperty(property)"
+          >
+            <div>
+              <span class="property-list__name">{{ property.name }}</span>
+              <span class="property-list__address">{{ propertyAddress(property) }}</span>
+            </div>
+            @if (property.latitude === null || property.longitude === null) {
+              <span class="property-list__badge">No location</span>
+            }
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</div>

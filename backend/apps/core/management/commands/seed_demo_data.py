@@ -89,9 +89,15 @@ class Command(BaseCommand):
                 "address": "Links Road",
                 "city": "Bamburi",
                 "country": "Kenya",
+                "latitude": Decimal("-4.0437400"),
+                "longitude": Decimal("39.6707100"),
                 "created_by": owner,
             },
         )
+        if property_obj.latitude is None or property_obj.longitude is None:
+            property_obj.latitude = Decimal("-4.0437400")
+            property_obj.longitude = Decimal("39.6707100")
+            property_obj.save(update_fields=["latitude", "longitude"])
 
         rent_by_type = {
             Unit.UnitType.STUDIO: Decimal("18000"),

@@ -34,7 +34,11 @@
             ],
             "styles": [
               "src/styles/tailwind.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/leaflet/dist/leaflet.css"
+            ],
+            "allowedCommonJsDependencies": [
+              "leaflet"
             ]
           },
           "configurations": {
@@ -99,7 +103,8 @@
             ],
             "styles": [
               "src/styles/tailwind.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/leaflet/dist/leaflet.css"
             ]
           }
         }

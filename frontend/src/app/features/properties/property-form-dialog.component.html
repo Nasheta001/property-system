@@ -32,6 +32,18 @@
       </mat-form-field>
     </div>
 
+    <div class="property-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>Latitude</mat-label>
+        <input matInput formControlName="latitude" placeholder="e.g. -4.043740" />
+        <mat-hint>Optional — powers the Maps page</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Longitude</mat-label>
+        <input matInput formControlName="longitude" placeholder="e.g. 39.658871" />
+      </mat-form-field>
+    </div>
+
     <mat-form-field appearance="outline">
       <mat-label>Description</mat-label>
       <textarea matInput formControlName="description" rows="2"></textarea>
