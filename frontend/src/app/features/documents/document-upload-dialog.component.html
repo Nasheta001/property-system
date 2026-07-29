@@ -1,0 +1,79 @@
+<h2 mat-dialog-title>Upload document</h2>
+
+<mat-dialog-content>
+  @if (isLoadingOptions()) {
+    <div class="document-form__loading">
+      <mat-spinner diameter="28" />
+    </div>
+  } @else {
+    <form [formGroup]="form" class="document-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="e.g. Signed lease agreement" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Document type</mat-label>
+        <mat-select formControlName="document_type">
+          <mat-option value="lease_agreement">Lease Agreement</mat-option>
+          <mat-option value="identification">Identification</mat-option>
+          <mat-option value="proof_of_payment">Proof of Payment</mat-option>
+          <mat-option value="inspection_report">Inspection Report</mat-option>
+          <mat-option value="insurance">Insurance</mat-option>
+          <mat-option value="contract">Contract</mat-option>
+          <mat-option value="other">Other</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="document-form__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Property (optional)</mat-label>
+          <mat-select formControlName="property">
+            <mat-option value="">None</mat-option>
+            @for (property of properties(); track property.id) {
+              <mat-option [value]="property.id">{{ property.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Lease (optional)</mat-label>
+          <mat-select formControlName="lease">
+            <mat-option value="">None</mat-option>
+            @for (lease of leases(); track lease.id) {
+              <mat-option [value]="lease.id">{{ lease.unit_number }} — {{ lease.tenant_name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tenant (optional)</mat-label>
+        <mat-select formControlName="tenant">
+          <mat-option value="">None</mat-option>
+          @for (tenant of tenants(); track tenant.id) {
+            <mat-option [value]="tenant.id">{{ tenant.full_name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description (optional)</mat-label>
+        <textarea matInput formControlName="description" rows="2"></textarea>
+      </mat-form-field>
+
+      <div class="document-form__file">
+        <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.jpg,.jpeg,.png" (change)="onFileSelected($event)" />
+        @if (fileError) {
+          <p class="document-form__file-error">{{ fileError }}</p>
+        }
+      </div>
+    </form>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button class="document-form__submit" [disabled]="isLoadingOptions()" (click)="submit()">
+    Upload
+  </button>
+</mat-dialog-actions>

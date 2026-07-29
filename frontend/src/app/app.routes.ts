@@ -75,6 +75,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/maintenance/vendors-page.component').then((m) => m.VendorsPageComponent),
       },
+      {
+        path: 'documents',
+        loadComponent: () =>
+          import('./features/documents/documents-page.component').then((m) => m.DocumentsPageComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

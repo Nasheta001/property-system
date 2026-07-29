@@ -1,9 +1,11 @@
 from decimal import Decimal
 
+from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
 
+from apps.documents.models import Document
 from apps.leases.models import Lease
 from apps.leases.services import activate_lease
 from apps.maintenance.models import MaintenanceRequest, Vendor
@@ -211,6 +213,27 @@ class Command(BaseCommand):
             )
             request_obj = verify(request_obj, owner)
             assign(request_obj, owner, vendor)
+
+        # --- Documents --------------------------------------------------
+        first_lease = Lease.objects.filter(organization=organization).order_by("start_date").first()
+        if first_lease is not None and not Document.objects.filter(
+            organization=organization, lease=first_lease, document_type=Document.DocumentType.LEASE_AGREEMENT
+        ).exists():
+            document = Document(
+                organization=organization,
+                lease=first_lease,
+                tenant=first_lease.tenant,
+                property=first_lease.unit.floor.building.property,
+                uploaded_by=owner,
+                title=f"Lease agreement — {first_lease.unit.unit_number}",
+                document_type=Document.DocumentType.LEASE_AGREEMENT,
+                created_by=owner,
+            )
+            document.file.save(
+                f"lease-{first_lease.unit.unit_number}.pdf",
+                ContentFile(b"%PDF-1.4\n% Demo placeholder lease agreement.\n"),
+                save=True,
+            )
 
         self.stdout.write(self.style.SUCCESS("Demo data seeded successfully."))
         self.stdout.write(f"  Organization: {organization.name} ({organization.slug})")

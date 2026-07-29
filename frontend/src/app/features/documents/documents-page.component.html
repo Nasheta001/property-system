@@ -1,0 +1,56 @@
+<div class="documents-page">
+  <header class="documents-page__header">
+    <div>
+      <h1 class="documents-page__title">Documents</h1>
+      <p class="documents-page__subtitle">Lease agreements, IDs, and other files across your portfolio.</p>
+    </div>
+    <button mat-flat-button class="documents-page__add" (click)="openUploadDialog()">
+      <mat-icon>upload_file</mat-icon>
+      Upload document
+    </button>
+  </header>
+
+  <div class="documents-page__toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Type</mat-label>
+      <mat-select [formControl]="typeControl">
+        @for (option of typeOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (isLoading()) {
+    <div class="documents-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else if (documents().length === 0) {
+    <div class="documents-page__empty">No documents match this filter.</div>
+  } @else {
+    <div class="data-table">
+      <div class="data-table__row data-table__row--head">
+        <span>Title</span>
+        <span>Type</span>
+        <span>Linked to</span>
+        <span>Uploaded by</span>
+        <span></span>
+      </div>
+      @for (document of documents(); track document.id) {
+        <div class="data-table__row">
+          <span class="data-table__primary">
+            <a [href]="document.file" target="_blank" rel="noopener">{{ document.title }}</a>
+          </span>
+          <span class="data-table__secondary">{{ document.document_type.replace('_', ' ') }}</span>
+          <span class="data-table__secondary">{{ linkedTo(document) }}</span>
+          <span class="data-table__secondary">{{ document.uploaded_by_name || '—' }}</span>
+          <span class="data-table__actions">
+            <button mat-icon-button (click)="deleteDocument(document)" aria-label="Delete document" title="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

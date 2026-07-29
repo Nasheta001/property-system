@@ -23,5 +23,6 @@ export class SidebarComponent {
     { label: 'Payments', icon: 'payments', route: '/payments' },
     { label: 'Maintenance', icon: 'build', route: '/maintenance' },
     { label: 'Vendors', icon: 'handyman', route: '/vendors' },
+    { label: 'Documents', icon: 'folder', route: '/documents' },
   ];
 }

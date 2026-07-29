@@ -1,0 +1,81 @@
+@use '../../shared/styles/data-table' as dt;
+
+.documents-page {
+  @include dt.page;
+
+  &__header {
+    @include dt.page-header;
+  }
+
+  &__title {
+    @include dt.page-title;
+  }
+
+  &__subtitle {
+    @include dt.page-subtitle;
+  }
+
+  &__add {
+    background-color: var(--accent) !important;
+    color: var(--accent-contrast) !important;
+    white-space: nowrap;
+  }
+
+  &__toolbar {
+    @include dt.toolbar;
+
+    mat-form-field {
+      width: 200px;
+    }
+  }
+
+  &__loading {
+    @include dt.loading-state;
+  }
+
+  &__empty {
+    @include dt.empty-state;
+  }
+}
+
+.data-table {
+  @include dt.data-table;
+
+  &__row {
+    @include dt.data-table-row(1.6fr 1fr 1.6fr 1.2fr auto);
+
+    &--head {
+      @include dt.data-table-head;
+    }
+  }
+
+  &__primary {
+    font-weight: 500;
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+  }
+
+  &__secondary {
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    text-transform: capitalize;
+  }
+
+  &__actions {
+    @include dt.data-table-actions;
+  }
+}
+
+@media (max-width: 900px) {
+  .data-table__row {
+    grid-template-columns: 1.6fr 1fr auto;
+
+    span:nth-child(3),
+    span:nth-child(4) {
+      display: none;
+    }
+  }
+}
