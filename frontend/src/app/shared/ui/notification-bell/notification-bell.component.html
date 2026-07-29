@@ -1,0 +1,40 @@
+<button
+  mat-icon-button
+  [matMenuTriggerFor]="menu"
+  (menuOpened)="onMenuOpened()"
+  aria-label="Notifications"
+  class="notification-bell"
+>
+  <mat-icon [matBadge]="unreadCount() > 0 ? unreadCount() : null" matBadgeColor="warn" matBadgeSize="small">
+    notifications
+  </mat-icon>
+</button>
+
+<mat-menu #menu="matMenu" class="notification-bell__menu">
+  <div class="notification-bell__header" (click)="$event.stopPropagation()">
+    <span>Notifications</span>
+    @if (unreadCount() > 0) {
+      <button mat-button (click)="markAllRead($event)">Mark all read</button>
+    }
+  </div>
+
+  @if (isLoading()) {
+    <div class="notification-bell__loading">
+      <mat-spinner diameter="24" />
+    </div>
+  } @else if (notifications().length === 0) {
+    <p class="notification-bell__empty">You're all caught up.</p>
+  } @else {
+    @for (notification of notifications(); track notification.id) {
+      <button mat-menu-item (click)="openNotification(notification)" class="notification-bell__item">
+        <span class="notification-bell__dot" [class.notification-bell__dot--unread]="!notification.is_read"></span>
+        <span class="notification-bell__item-content">
+          <span class="notification-bell__item-title">{{ notification.title }}</span>
+          @if (notification.body) {
+            <span class="notification-bell__item-body">{{ notification.body }}</span>
+          }
+        </span>
+      </button>
+    }
+  }
+</mat-menu>

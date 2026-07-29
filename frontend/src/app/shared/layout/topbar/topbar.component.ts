@@ -5,12 +5,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { NotificationBellComponent } from '../../ui/notification-bell/notification-bell.component';
 import { OrgSwitcherComponent } from '../../ui/org-switcher/org-switcher.component';
 import { ThemeToggleComponent } from '../../ui/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-topbar',
-  imports: [MatButtonModule, MatIconModule, MatMenuModule, OrgSwitcherComponent, ThemeToggleComponent],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    NotificationBellComponent,
+    OrgSwitcherComponent,
+    ThemeToggleComponent,
+  ],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.scss',
 })
