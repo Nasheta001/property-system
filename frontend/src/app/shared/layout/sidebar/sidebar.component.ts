@@ -27,5 +27,6 @@ export class SidebarComponent {
     { label: 'Activity', icon: 'history', route: '/activity' },
     { label: 'Reports', icon: 'bar_chart', route: '/reports' },
     { label: 'Support', icon: 'support_agent', route: '/support' },
+    { label: 'Calendar', icon: 'calendar_month', route: '/calendar' },
   ];
 }

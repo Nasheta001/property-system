@@ -1,0 +1,61 @@
+<div class="calendar-page">
+  <header class="calendar-page__header">
+    <div>
+      <h1 class="calendar-page__title">Calendar</h1>
+      <p class="calendar-page__subtitle">Lease dates, rent due dates, payments, and maintenance activity.</p>
+    </div>
+    <div class="calendar-page__nav">
+      <button mat-icon-button (click)="previousMonth()" aria-label="Previous month">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span class="calendar-page__month-label">{{ monthLabel() }}</span>
+      <button mat-icon-button (click)="nextMonth()" aria-label="Next month">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <button mat-stroked-button (click)="goToToday()">Today</button>
+    </div>
+  </header>
+
+  <div class="calendar-legend">
+    @for (item of legend; track item.type) {
+      <span class="calendar-legend__item">
+        <span class="calendar-legend__dot" [style.background-color]="'var(--event-' + item.type + ')'"></span>
+        {{ item.label }}
+      </span>
+    }
+  </div>
+
+  @if (isLoading()) {
+    <div class="calendar-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else {
+    <div class="calendar-grid">
+      @for (label of weekdayLabels; track label) {
+        <div class="calendar-grid__weekday">{{ label }}</div>
+      }
+      @for (cell of gridCells(); track cell.dateKey) {
+        <div
+          class="calendar-grid__cell"
+          [class.calendar-grid__cell--muted]="!cell.inCurrentMonth"
+          [class.calendar-grid__cell--today]="cell.isToday"
+        >
+          <span class="calendar-grid__date">{{ cell.dayNumber }}</span>
+          <div class="calendar-grid__events">
+            @for (event of cell.events; track event.id) {
+              <button
+                type="button"
+                class="calendar-event"
+                [style.border-left-color]="'var(--event-' + event.type + ')'"
+                [title]="event.title + ' — ' + event.subtitle"
+                (click)="openEvent(event)"
+              >
+                {{ event.title }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

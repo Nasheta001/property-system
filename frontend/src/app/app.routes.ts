@@ -95,6 +95,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/support/support-page.component').then((m) => m.SupportPageComponent),
       },
+      {
+        path: 'calendar',
+        loadComponent: () =>
+          import('./features/calendar/calendar-page.component').then((m) => m.CalendarPageComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
