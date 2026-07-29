@@ -45,6 +45,16 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/dashboard/dashboard-page.component').then((m) => m.DashboardPageComponent),
       },
+      {
+        path: 'tenants',
+        loadComponent: () =>
+          import('./features/tenants/tenants-page.component').then((m) => m.TenantsPageComponent),
+      },
+      {
+        path: 'leases',
+        loadComponent: () =>
+          import('./features/leases/leases-page.component').then((m) => m.LeasesPageComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

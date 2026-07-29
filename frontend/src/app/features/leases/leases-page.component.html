@@ -1,0 +1,74 @@
+<div class="leases-page">
+  <header class="leases-page__header">
+    <div>
+      <h1 class="leases-page__title">Leases</h1>
+      <p class="leases-page__subtitle">Tenancy agreements across your portfolio.</p>
+    </div>
+    <button mat-flat-button class="leases-page__add" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      New lease
+    </button>
+  </header>
+
+  <div class="leases-page__toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [formControl]="statusControl">
+        @for (option of statusOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (isLoading()) {
+    <div class="leases-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else if (leases().length === 0) {
+    <div class="leases-page__empty">No leases match this filter.</div>
+  } @else {
+    <div class="data-table">
+      <div class="data-table__row data-table__row--head">
+        <span>Unit</span>
+        <span>Tenant</span>
+        <span>Term</span>
+        <span>Rent</span>
+        <span>Status</span>
+        <span></span>
+      </div>
+      @for (lease of leases(); track lease.id) {
+        <div class="data-table__row">
+          <span class="data-table__primary">{{ lease.unit_number }}</span>
+          <span>{{ lease.tenant_name }}</span>
+          <span class="data-table__secondary">
+            {{ lease.start_date }} &rarr; {{ lease.end_date || 'Month-to-month' }}
+          </span>
+          <span>{{ lease.rent_amount | number: '1.0-0' }}</span>
+          <span>
+            <span class="status-badge" [class]="'status-badge--' + statusTone(lease.status)">
+              {{ lease.status.replace('_', ' ') }}
+            </span>
+          </span>
+          <span class="data-table__actions">
+            @if (lease.status === 'draft') {
+              <button mat-icon-button (click)="activate(lease)" aria-label="Activate lease" title="Activate">
+                <mat-icon>check_circle</mat-icon>
+              </button>
+            }
+            @if (lease.status === 'active' || lease.status === 'pending_renewal') {
+              <button mat-icon-button (click)="terminate(lease)" aria-label="Terminate lease" title="Terminate">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            }
+            @if (lease.status !== 'active') {
+              <button mat-icon-button (click)="deleteLease(lease)" aria-label="Delete lease" title="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

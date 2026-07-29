@@ -1,0 +1,84 @@
+@use '../../shared/styles/data-table' as dt;
+
+.tenants-page {
+  @include dt.page;
+
+  &__header {
+    @include dt.page-header;
+  }
+
+  &__title {
+    @include dt.page-title;
+  }
+
+  &__subtitle {
+    @include dt.page-subtitle;
+  }
+
+  &__add {
+    background-color: var(--accent) !important;
+    color: var(--accent-contrast) !important;
+    white-space: nowrap;
+  }
+
+  &__toolbar {
+    @include dt.toolbar;
+  }
+
+  &__loading {
+    @include dt.loading-state;
+  }
+
+  &__empty {
+    @include dt.empty-state;
+  }
+}
+
+.data-table {
+  @include dt.data-table;
+
+  &__row {
+    @include dt.data-table-row(2fr 1.6fr 1fr 1fr auto);
+
+    &--head {
+      @include dt.data-table-head;
+    }
+  }
+
+  &__primary {
+    font-weight: 500;
+  }
+
+  &__secondary {
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  &__actions {
+    @include dt.data-table-actions;
+  }
+}
+
+.status-badge {
+  @include dt.status-badge;
+
+  &--success {
+    @include dt.status-badge-color(success);
+  }
+
+  &--neutral {
+    @include dt.status-badge-color(neutral);
+  }
+}
+
+@media (max-width: 900px) {
+  .data-table__row {
+    grid-template-columns: 1.6fr 1.2fr auto;
+
+    span:nth-child(3),
+    span:nth-child(4) {
+      display: none;
+    }
+  }
+}

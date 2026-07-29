@@ -15,5 +15,9 @@ interface NavItem {
   styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent {
-  protected readonly navItems: NavItem[] = [{ label: 'Dashboard', icon: 'space_dashboard', route: '/dashboard' }];
+  protected readonly navItems: NavItem[] = [
+    { label: 'Dashboard', icon: 'space_dashboard', route: '/dashboard' },
+    { label: 'Tenants', icon: 'groups', route: '/tenants' },
+    { label: 'Leases', icon: 'description', route: '/leases' },
+  ];
 }

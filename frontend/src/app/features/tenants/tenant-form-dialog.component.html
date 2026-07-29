@@ -1,0 +1,69 @@
+<h2 mat-dialog-title>{{ tenant ? 'Edit tenant' : 'Add tenant' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="tenant-form">
+    <div class="tenant-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>First name</mat-label>
+        <input matInput formControlName="first_name" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Last name</mat-label>
+        <input matInput formControlName="last_name" />
+      </mat-form-field>
+    </div>
+
+    <div class="tenant-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>Phone number</mat-label>
+        <input matInput formControlName="phone_number" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+        @if (form.controls.email.hasError('email')) {
+          <mat-error>Enter a valid email.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="tenant-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>National ID</mat-label>
+        <input matInput formControlName="national_id" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Occupation</mat-label>
+        <input matInput formControlName="occupation" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Employer</mat-label>
+      <input matInput formControlName="employer" />
+    </mat-form-field>
+
+    <div class="tenant-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>Emergency contact name</mat-label>
+        <input matInput formControlName="emergency_contact_name" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Emergency contact phone</mat-label>
+        <input matInput formControlName="emergency_contact_phone" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Notes</mat-label>
+      <textarea matInput formControlName="notes" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button class="tenant-form__submit" (click)="submit()">
+    {{ tenant ? 'Save changes' : 'Add tenant' }}
+  </button>
+</mat-dialog-actions>

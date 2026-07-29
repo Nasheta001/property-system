@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { forkJoin } from 'rxjs';
 
+import { LeasesService } from '../../core/services/leases.service';
 import { OrganizationService } from '../../core/services/organization.service';
 import { PropertiesService } from '../../core/services/properties.service';
 import { Property } from '../../core/models/property.model';
@@ -26,6 +27,7 @@ import { StatCardComponent } from '../../shared/ui/stat-card/stat-card.component
 })
 export class DashboardPageComponent implements OnInit {
   private readonly propertiesService = inject(PropertiesService);
+  private readonly leasesService = inject(LeasesService);
   private readonly fb = inject(FormBuilder);
   protected readonly organizationService = inject(OrganizationService);
 
@@ -34,6 +36,7 @@ export class DashboardPageComponent implements OnInit {
   protected readonly totalUnitsCount = signal(0);
   protected readonly vacantUnitsCount = signal(0);
   protected readonly occupiedUnitsCount = signal(0);
+  protected readonly activeLeasesCount = signal(0);
   protected readonly recentProperties = signal<Property[]>([]);
 
   protected readonly isCreatingOrg = signal(false);
@@ -59,13 +62,15 @@ export class DashboardPageComponent implements OnInit {
       units: this.propertiesService.listUnits({ page_size: 1 }),
       vacant: this.propertiesService.listUnits({ page_size: 1, status: 'vacant' }),
       occupied: this.propertiesService.listUnits({ page_size: 1, status: 'occupied' }),
+      activeLeases: this.leasesService.list({ page_size: 1, status: 'active' }),
     }).subscribe({
-      next: ({ properties, units, vacant, occupied }) => {
+      next: ({ properties, units, vacant, occupied, activeLeases }) => {
         this.propertiesCount.set(properties.count);
         this.recentProperties.set(properties.results);
         this.totalUnitsCount.set(units.count);
         this.vacantUnitsCount.set(vacant.count);
         this.occupiedUnitsCount.set(occupied.count);
+        this.activeLeasesCount.set(activeLeases.count);
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false),

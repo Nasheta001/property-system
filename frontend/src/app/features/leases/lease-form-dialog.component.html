@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>New lease</h2>
+
+<mat-dialog-content>
+  @if (isLoadingOptions()) {
+    <div class="lease-form__loading">
+      <mat-spinner diameter="28" />
+    </div>
+  } @else {
+    <form [formGroup]="form" class="lease-form">
+      @if (vacantUnits().length === 0) {
+        <p class="lease-form__hint">No vacant units available. Terminate or free up a unit first.</p>
+      }
+
+      <mat-form-field appearance="outline">
+        <mat-label>Unit</mat-label>
+        <mat-select formControlName="unit" (selectionChange)="onUnitSelected($event.value)">
+          @for (unit of vacantUnits(); track unit.id) {
+            <mat-option [value]="unit.id">{{ unit.unit_number }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tenant</mat-label>
+        <mat-select formControlName="tenant">
+          @for (tenant of tenants(); track tenant.id) {
+            <mat-option [value]="tenant.id">{{ tenant.full_name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="lease-form__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Start date</mat-label>
+          <input matInput type="date" formControlName="start_date" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>End date (optional)</mat-label>
+          <input matInput type="date" formControlName="end_date" />
+        </mat-form-field>
+      </div>
+
+      <div class="lease-form__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Rent amount</mat-label>
+          <input matInput type="number" formControlName="rent_amount" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Deposit amount</mat-label>
+          <input matInput type="number" formControlName="deposit_amount" />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Rent due day of month</mat-label>
+        <input matInput type="number" formControlName="billing_day" min="1" max="28" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Notes</mat-label>
+        <textarea matInput formControlName="notes" rows="2"></textarea>
+      </mat-form-field>
+    </form>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button
+    mat-flat-button
+    class="lease-form__submit"
+    [disabled]="isLoadingOptions() || vacantUnits().length === 0"
+    (click)="submit()"
+  >
+    Create lease
+  </button>
+</mat-dialog-actions>

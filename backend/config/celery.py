@@ -14,6 +14,10 @@ app.conf.beat_schedule = {
         "task": "apps.users.tasks.purge_expired_tokens",
         "schedule": crontab(hour=3, minute=0),
     },
+    "expire-due-leases": {
+        "task": "apps.leases.tasks.expire_leases",
+        "schedule": crontab(hour=1, minute=0),
+    },
 }
 
 

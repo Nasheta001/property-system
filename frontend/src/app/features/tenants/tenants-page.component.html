@@ -1,0 +1,65 @@
+<div class="tenants-page">
+  <header class="tenants-page__header">
+    <div>
+      <h1 class="tenants-page__title">Tenants</h1>
+      <p class="tenants-page__subtitle">People currently or previously renting a unit.</p>
+    </div>
+    <button mat-flat-button class="tenants-page__add" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Add tenant
+    </button>
+  </header>
+
+  <div class="tenants-page__toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Search tenants</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="Name, email or phone" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  @if (isLoading()) {
+    <div class="tenants-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else if (tenants().length === 0) {
+    <div class="tenants-page__empty">No tenants yet. Add your first tenant to get started.</div>
+  } @else {
+    <div class="data-table">
+      <div class="data-table__row data-table__row--head">
+        <span>Name</span>
+        <span>Contact</span>
+        <span>Occupation</span>
+        <span>Status</span>
+        <span></span>
+      </div>
+      @for (tenant of tenants(); track tenant.id) {
+        <div class="data-table__row">
+          <span class="data-table__primary">{{ tenant.full_name }}</span>
+          <span class="data-table__secondary">
+            {{ tenant.phone_number }}
+            @if (tenant.email) {
+              <br />{{ tenant.email }}
+            }
+          </span>
+          <span>{{ tenant.occupation || '—' }}</span>
+          <span>
+            @if (tenant.active_lease_id) {
+              <span class="status-badge status-badge--success">Leased</span>
+            } @else {
+              <span class="status-badge status-badge--neutral">No active lease</span>
+            }
+          </span>
+          <span class="data-table__actions">
+            <button mat-icon-button (click)="openEditDialog(tenant)" aria-label="Edit tenant">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteTenant(tenant)" aria-label="Delete tenant">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

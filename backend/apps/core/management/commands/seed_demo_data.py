@@ -2,9 +2,13 @@ from decimal import Decimal
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from django.utils import timezone
 
+from apps.leases.models import Lease
+from apps.leases.services import activate_lease
 from apps.organizations.models import Membership, Organization
 from apps.properties.models import Building, Floor, Property, Unit
+from apps.tenants.models import TenantProfile
 from apps.users.models import User
 
 DEMO_OWNER_EMAIL = "owner@demo.propertysystem.local"
@@ -117,6 +121,46 @@ class Command(BaseCommand):
                             "created_by": owner,
                         },
                     )
+
+        # --- Tenants & leases --------------------------------------------
+        demo_tenants = [
+            {
+                "first_name": "Amina",
+                "last_name": "Hassan",
+                "email": "amina.hassan@example.com",
+                "phone_number": "+254700111222",
+                "occupation": "Nurse",
+            },
+            {
+                "first_name": "Brian",
+                "last_name": "Otieno",
+                "email": "brian.otieno@example.com",
+                "phone_number": "+254700333444",
+                "occupation": "Software Engineer",
+            },
+        ]
+
+        occupied_units = list(Unit.objects.filter(organization=organization).order_by("unit_number")[:2])
+        for tenant_data, target_unit in zip(demo_tenants, occupied_units):
+            tenant, _ = TenantProfile.objects.get_or_create(
+                organization=organization,
+                email=tenant_data["email"],
+                defaults={**tenant_data, "created_by": owner},
+            )
+            lease, lease_created = Lease.objects.get_or_create(
+                organization=organization,
+                unit=target_unit,
+                tenant=tenant,
+                defaults={
+                    "start_date": timezone.now().date().replace(day=1),
+                    "rent_amount": target_unit.rent_amount,
+                    "deposit_amount": target_unit.deposit_amount,
+                    "billing_day": 1,
+                    "created_by": owner,
+                },
+            )
+            if lease_created:
+                activate_lease(lease, owner)
 
         self.stdout.write(self.style.SUCCESS("Demo data seeded successfully."))
         self.stdout.write(f"  Organization: {organization.name} ({organization.slug})")
