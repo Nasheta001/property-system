@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+import { platformStaffGuard } from './core/guards/platform-staff.guard';
 
 export const routes: Routes = [
   {
@@ -106,6 +107,11 @@ export const routes: Routes = [
           import('./features/subscriptions/subscription-page.component').then(
             (m) => m.SubscriptionPageComponent
           ),
+      },
+      {
+        path: 'admin',
+        canActivate: [platformStaffGuard],
+        loadComponent: () => import('./features/admin/admin-page.component').then((m) => m.AdminPageComponent),
       },
     ],
   },

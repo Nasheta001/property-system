@@ -1,0 +1,82 @@
+<div class="admin-page">
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Admin Portal</h1>
+      <p class="admin-page__subtitle">Platform-wide visibility across every organization.</p>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <div class="admin-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else if (stats()) {
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-card__label">Organizations</span>
+        <span class="stat-card__value">{{ stats()!.total_organizations }}</span>
+        <span class="stat-card__hint">{{ stats()!.active_organizations }} active · {{ stats()!.suspended_organizations }} suspended</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__label">Users</span>
+        <span class="stat-card__value">{{ stats()!.total_users }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__label">Properties</span>
+        <span class="stat-card__value">{{ stats()!.total_properties }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__label">Units</span>
+        <span class="stat-card__value">{{ stats()!.total_units }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__label">Estimated MRR</span>
+        <span class="stat-card__value">${{ stats()!.estimated_mrr | number: '1.0-0' }}</span>
+      </div>
+    </div>
+
+    <section class="plan-breakdown">
+      @for (row of stats()!.plan_breakdown; track row.plan) {
+        <span class="plan-pill">
+          <strong>{{ row.count }}</strong>
+          {{ row.name }}
+        </span>
+      }
+    </section>
+
+    <div class="data-table">
+      <div class="data-table__row data-table__row--head">
+        <span>Organization</span>
+        <span>Owner</span>
+        <span>Plan</span>
+        <span>Members</span>
+        <span>Properties</span>
+        <span>Units</span>
+        <span>Status</span>
+        <span>Actions</span>
+      </div>
+      @for (org of organizations(); track org.id) {
+        <div class="data-table__row">
+          <span class="data-table__primary">{{ org.name }}</span>
+          <span class="data-table__secondary">{{ org.owner_email }}</span>
+          <span class="data-table__secondary">{{ org.subscription_plan }}</span>
+          <span>{{ org.member_count }}</span>
+          <span>{{ org.property_count }}</span>
+          <span>{{ org.unit_count }}</span>
+          <span>
+            <span class="status-badge" [class]="'status-badge--' + (org.is_active ? 'success' : 'danger')">
+              {{ org.is_active ? 'Active' : 'Suspended' }}
+            </span>
+          </span>
+          <span class="data-table__actions">
+            @if (org.is_active) {
+              <button mat-button color="warn" (click)="suspend(org)">Suspend</button>
+            } @else {
+              <button mat-button (click)="reactivate(org)">Reactivate</button>
+            }
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

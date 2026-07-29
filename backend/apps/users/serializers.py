@@ -19,9 +19,10 @@ class UserSerializer(serializers.ModelSerializer):
             "phone_number",
             "avatar",
             "is_verified",
+            "is_staff",
             "created_at",
         ]
-        read_only_fields = ["id", "email", "is_verified", "created_at"]
+        read_only_fields = ["id", "email", "is_verified", "is_staff", "created_at"]
 
 
 class RegisterSerializer(serializers.ModelSerializer):

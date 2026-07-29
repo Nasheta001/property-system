@@ -7,5 +7,6 @@ export interface User {
   phone_number: string;
   avatar: string | null;
   is_verified: boolean;
+  is_staff: boolean;
   created_at: string;
 }

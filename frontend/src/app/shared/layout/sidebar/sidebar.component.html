@@ -18,4 +18,22 @@
       </li>
     }
   </ul>
+
+  @if (isPlatformStaff()) {
+    <div class="sidebar__section-label">Platform</div>
+    <ul class="sidebar__nav">
+      @for (item of platformNavItems; track item.route) {
+        <li>
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="sidebar__link--active"
+            class="sidebar__link"
+          >
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span>{{ item.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  }
 </nav>

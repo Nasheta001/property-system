@@ -22,6 +22,7 @@ urlpatterns = [
     path("api/v1/", include("apps.support.urls")),
     path("api/v1/", include("apps.calendar_app.urls")),
     path("api/v1/", include("apps.subscriptions.urls")),
+    path("api/v1/", include("apps.platform_admin.urls")),
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/v1/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
 ]

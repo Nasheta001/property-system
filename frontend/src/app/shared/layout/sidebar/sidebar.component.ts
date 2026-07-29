@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+
+import { AuthService } from '../../../core/services/auth.service';
 
 interface NavItem {
   label: string;
@@ -15,6 +17,10 @@ interface NavItem {
   styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent {
+  private readonly authService = inject(AuthService);
+
+  protected readonly isPlatformStaff = computed(() => !!this.authService.currentUser()?.is_staff);
+
   protected readonly navItems: NavItem[] = [
     { label: 'Dashboard', icon: 'space_dashboard', route: '/dashboard' },
     { label: 'Properties', icon: 'apartment', route: '/properties' },
@@ -29,5 +35,9 @@ export class SidebarComponent {
     { label: 'Support', icon: 'support_agent', route: '/support' },
     { label: 'Calendar', icon: 'calendar_month', route: '/calendar' },
     { label: 'Subscription', icon: 'workspace_premium', route: '/subscription' },
+  ];
+
+  protected readonly platformNavItems: NavItem[] = [
+    { label: 'Admin Portal', icon: 'admin_panel_settings', route: '/admin' },
   ];
 }

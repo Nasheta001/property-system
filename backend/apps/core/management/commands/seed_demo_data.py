@@ -22,6 +22,8 @@ DEMO_OWNER_EMAIL = "owner@demo.propertysystem.local"
 DEMO_OWNER_PASSWORD = "DemoPassword123!"
 DEMO_MANAGER_EMAIL = "manager@demo.propertysystem.local"
 DEMO_MANAGER_PASSWORD = "DemoPassword123!"
+DEMO_STAFF_EMAIL = "staff@demo.propertysystem.local"
+DEMO_STAFF_PASSWORD = "DemoPassword123!"
 
 
 class Command(BaseCommand):
@@ -44,6 +46,14 @@ class Command(BaseCommand):
         if manager_created:
             manager.set_password(DEMO_MANAGER_PASSWORD)
             manager.save(update_fields=["password"])
+
+        staff, staff_created = User.objects.get_or_create(
+            email=DEMO_STAFF_EMAIL,
+            defaults={"first_name": "Priya", "last_name": "Shah", "is_staff": True, "is_verified": True},
+        )
+        if staff_created:
+            staff.set_password(DEMO_STAFF_PASSWORD)
+            staff.save(update_fields=["password"])
 
         organization, org_created = Organization.objects.get_or_create(
             slug="green-holdings",
@@ -253,3 +263,4 @@ class Command(BaseCommand):
         self.stdout.write(f"  Organization: {organization.name} ({organization.slug})")
         self.stdout.write(f"  Owner login: {DEMO_OWNER_EMAIL} / {DEMO_OWNER_PASSWORD}")
         self.stdout.write(f"  Manager login: {DEMO_MANAGER_EMAIL} / {DEMO_MANAGER_PASSWORD}")
+        self.stdout.write(f"  Platform staff login: {DEMO_STAFF_EMAIL} / {DEMO_STAFF_PASSWORD}")
