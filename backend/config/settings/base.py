@@ -59,6 +59,7 @@ LOCAL_APPS = [
     "apps.calendar_app",
     "apps.subscriptions",
     "apps.platform_admin",
+    "apps.ai_assistant",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -257,6 +258,17 @@ EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Property System <no-reply@propertysystem.local>")
 
 FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:4200")
+
+# --------------------------------------------------------------------------
+# AI Assistant
+#
+# When ANTHROPIC_API_KEY is unset (the default for local/demo environments),
+# apps.ai_assistant falls back to a deterministic provider that answers from
+# the organization's own data — the assistant is fully functional out of the
+# box, never a stub, even with no external key configured.
+# --------------------------------------------------------------------------
+ANTHROPIC_API_KEY = env("ANTHROPIC_API_KEY", default="")
+AI_ASSISTANT_MODEL = env("AI_ASSISTANT_MODEL", default="claude-sonnet-5")
 
 # --------------------------------------------------------------------------
 # Logging (structured JSON, correlates with RequestIDMiddleware)

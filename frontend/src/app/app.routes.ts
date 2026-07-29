@@ -113,6 +113,11 @@ export const routes: Routes = [
         canActivate: [platformStaffGuard],
         loadComponent: () => import('./features/admin/admin-page.component').then((m) => m.AdminPageComponent),
       },
+      {
+        path: 'assistant',
+        loadComponent: () =>
+          import('./features/assistant/assistant-page.component').then((m) => m.AssistantPageComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

@@ -1,0 +1,76 @@
+<div class="assistant-page">
+  <aside class="assistant-sidebar">
+    <button mat-stroked-button class="assistant-sidebar__new" (click)="newConversation()">
+      <mat-icon>add</mat-icon>
+      New conversation
+    </button>
+
+    @if (isLoadingConversations()) {
+      <div class="assistant-sidebar__loading">
+        <mat-spinner diameter="24" />
+      </div>
+    } @else if (conversations().length === 0) {
+      <p class="assistant-sidebar__empty">No conversations yet.</p>
+    } @else {
+      <ul class="assistant-sidebar__list">
+        @for (conversation of conversations(); track conversation.id) {
+          <li>
+            <button
+              type="button"
+              class="assistant-sidebar__item"
+              [class.assistant-sidebar__item--active]="conversation.id === activeConversationId()"
+              (click)="openConversation(conversation)"
+            >
+              {{ conversation.title || 'Untitled conversation' }}
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </aside>
+
+  <section class="assistant-chat">
+    @if (messages().length === 0) {
+      <div class="assistant-chat__empty">
+        <h1 class="assistant-chat__title">Ask about your organization</h1>
+        <p class="assistant-chat__subtitle">
+          Occupancy, overdue rent, open maintenance, upcoming lease expirations — answered from your live data.
+        </p>
+        <div class="assistant-chat__suggestions">
+          @for (suggestion of suggestedQuestions; track suggestion.question) {
+            <button mat-stroked-button (click)="ask(suggestion.question)">{{ suggestion.label }}</button>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="assistant-transcript">
+        @for (message of messages(); track message.id) {
+          <div class="assistant-message" [class.assistant-message--user]="message.role === 'user'">
+            <div class="assistant-message__bubble">{{ message.content }}</div>
+          </div>
+        }
+        @if (isSending()) {
+          <div class="assistant-message">
+            <div class="assistant-message__bubble assistant-message__bubble--typing">
+              <mat-spinner diameter="16" />
+            </div>
+          </div>
+        }
+        <div #transcriptEnd></div>
+      </div>
+    }
+
+    <form class="assistant-composer" (submit)="$event.preventDefault(); ask()">
+      <textarea
+        rows="1"
+        placeholder="Ask a question about your organization…"
+        [(ngModel)]="draft"
+        name="question"
+        (keydown.enter)="onEnter($event)"
+      ></textarea>
+      <button mat-icon-button type="submit" [disabled]="!draft.trim() || isSending()" aria-label="Send">
+        <mat-icon>send</mat-icon>
+      </button>
+    </form>
+  </section>
+</div>

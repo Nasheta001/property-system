@@ -35,6 +35,7 @@ export class SidebarComponent {
     { label: 'Support', icon: 'support_agent', route: '/support' },
     { label: 'Calendar', icon: 'calendar_month', route: '/calendar' },
     { label: 'Subscription', icon: 'workspace_premium', route: '/subscription' },
+    { label: 'Assistant', icon: 'auto_awesome', route: '/assistant' },
   ];
 
   protected readonly platformNavItems: NavItem[] = [
