@@ -1,0 +1,123 @@
+<div class="reports-page">
+  <header class="reports-page__header">
+    <h1 class="reports-page__title">Reports</h1>
+    <p class="reports-page__subtitle">Revenue, occupancy, and maintenance trends across your portfolio.</p>
+  </header>
+
+  @if (isLoading()) {
+    <div class="reports-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else {
+    <div class="reports-grid">
+      <section class="report-card report-card--wide">
+        <div class="report-card__header">
+          <h2 class="report-card__title">Revenue, last 6 months</h2>
+          <span class="report-card__headline">{{ totalRevenue() | number: '1.0-0' }}</span>
+        </div>
+
+        @if (revenueBars().length === 0) {
+          <p class="report-card__empty">No payments recorded yet.</p>
+        } @else {
+          <div class="bar-chart bar-chart--vertical">
+            @for (bar of revenueBars(); track bar.label) {
+              <div class="bar-chart__column">
+                <span class="bar-chart__value">{{ bar.displayValue }}</span>
+                <div class="bar-chart__track bar-chart__track--vertical">
+                  <div class="bar-chart__fill bar-chart__fill--vertical" [style.height.%]="bar.heightPercent"></div>
+                </div>
+                <span class="bar-chart__label">{{ bar.label }}</span>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="report-card">
+        <h2 class="report-card__title">Occupancy by property</h2>
+
+        @if (occupancy().length === 0) {
+          <p class="report-card__empty">No properties yet.</p>
+        } @else {
+          <div class="occupancy-list">
+            @for (row of occupancy(); track row.property_id) {
+              <div class="occupancy-list__item">
+                <div class="occupancy-list__labels">
+                  <span class="occupancy-list__name">{{ row.property_name }}</span>
+                  <span class="occupancy-list__stat">{{ row.occupied_units }}/{{ row.total_units }} occupied</span>
+                </div>
+                <div class="bar-chart__track">
+                  <div class="bar-chart__fill" [style.width.%]="row.occupancy_rate"></div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="report-card">
+        <h2 class="report-card__title">Maintenance by category</h2>
+
+        @if (maintenanceCategoryBars().length === 0) {
+          <p class="report-card__empty">No maintenance requests yet.</p>
+        } @else {
+          <div class="occupancy-list">
+            @for (bar of maintenanceCategoryBars(); track bar.label) {
+              <div class="occupancy-list__item">
+                <div class="occupancy-list__labels">
+                  <span class="occupancy-list__name">{{ bar.label }}</span>
+                  <span class="occupancy-list__stat">{{ bar.displayValue }}</span>
+                </div>
+                <div class="bar-chart__track">
+                  <div class="bar-chart__fill" [style.width.%]="bar.heightPercent"></div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="report-card">
+        <h2 class="report-card__title">Maintenance by status</h2>
+
+        @if (maintenanceByStatus().length === 0) {
+          <p class="report-card__empty">No maintenance requests yet.</p>
+        } @else {
+          <div class="status-pills">
+            @for (row of maintenanceByStatus(); track row.status) {
+              <span class="status-pill">
+                <strong>{{ row.count }}</strong>
+                {{ (row.status ?? '').replace('_', ' ') }}
+              </span>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="report-card report-card--wide">
+        <h2 class="report-card__title">Leases expiring in the next 90 days</h2>
+
+        @if (leaseExpirations().length === 0) {
+          <p class="report-card__empty">No leases expiring soon.</p>
+        } @else {
+          <div class="data-table">
+            <div class="data-table__row data-table__row--head">
+              <span>Unit</span>
+              <span>Tenant</span>
+              <span>End date</span>
+              <span>Days left</span>
+            </div>
+            @for (row of leaseExpirations(); track row.lease_id) {
+              <div class="data-table__row">
+                <span class="data-table__primary">{{ row.unit_number }}</span>
+                <span>{{ row.tenant_name }}</span>
+                <span class="data-table__secondary">{{ row.end_date | date: 'mediumDate' }}</span>
+                <span>{{ row.days_remaining }}</span>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    </div>
+  }
+</div>
