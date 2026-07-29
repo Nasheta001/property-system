@@ -32,6 +32,14 @@
     margin-bottom: 32px;
   }
 
+  &__section {
+    margin-bottom: 32px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
   &__section-title {
     margin: 0 0 16px;
     font-size: 1.0625rem;
@@ -75,6 +83,52 @@
   &__badge {
     text-transform: capitalize;
     color: var(--text-secondary);
+  }
+}
+
+.activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  &__text {
+    flex: 1;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  &__time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
   }
 }
 

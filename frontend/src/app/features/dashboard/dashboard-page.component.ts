@@ -1,11 +1,15 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { forkJoin } from 'rxjs';
 
+import { ActivityLogEntry } from '../../core/models/activity.model';
+import { ActivityService } from '../../core/services/activity.service';
 import { LeasesService } from '../../core/services/leases.service';
 import { MaintenanceService } from '../../core/services/maintenance.service';
 import { OrganizationService } from '../../core/services/organization.service';
@@ -17,9 +21,11 @@ import { StatCardComponent } from '../../shared/ui/stat-card/stat-card.component
 @Component({
   selector: 'app-dashboard-page',
   imports: [
+    DatePipe,
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatProgressSpinnerModule,
     StatCardComponent,
@@ -32,6 +38,7 @@ export class DashboardPageComponent implements OnInit {
   private readonly leasesService = inject(LeasesService);
   private readonly paymentsService = inject(PaymentsService);
   private readonly maintenanceService = inject(MaintenanceService);
+  private readonly activityService = inject(ActivityService);
   private readonly fb = inject(FormBuilder);
   protected readonly organizationService = inject(OrganizationService);
 
@@ -44,6 +51,7 @@ export class DashboardPageComponent implements OnInit {
   protected readonly paidPaymentsCount = signal(0);
   protected readonly reportedIssuesCount = signal(0);
   protected readonly recentProperties = signal<Property[]>([]);
+  protected readonly recentActivity = signal<ActivityLogEntry[]>([]);
 
   protected readonly isCreatingOrg = signal(false);
   protected readonly createOrgError = signal<string | null>(null);
@@ -71,8 +79,9 @@ export class DashboardPageComponent implements OnInit {
       activeLeases: this.leasesService.list({ page_size: 1, status: 'active' }),
       paidPayments: this.paymentsService.list({ page_size: 1, status: 'paid' }),
       reportedIssues: this.maintenanceService.listRequests({ page_size: 1, status: 'reported' }),
+      recentActivity: this.activityService.list({ page_size: 6 }),
     }).subscribe({
-      next: ({ properties, units, vacant, occupied, activeLeases, paidPayments, reportedIssues }) => {
+      next: ({ properties, units, vacant, occupied, activeLeases, paidPayments, reportedIssues, recentActivity }) => {
         this.propertiesCount.set(properties.count);
         this.recentProperties.set(properties.results);
         this.totalUnitsCount.set(units.count);
@@ -81,6 +90,7 @@ export class DashboardPageComponent implements OnInit {
         this.activeLeasesCount.set(activeLeases.count);
         this.paidPaymentsCount.set(paidPayments.count);
         this.reportedIssuesCount.set(reportedIssues.count);
+        this.recentActivity.set(recentActivity.results);
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false),

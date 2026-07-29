@@ -44,6 +44,26 @@
           </div>
         }
       </section>
+
+      <section class="dashboard__section">
+        <h2 class="dashboard__section-title">Recent activity</h2>
+
+        @if (recentActivity().length === 0) {
+          <p class="dashboard__empty">Nothing has happened yet.</p>
+        } @else {
+          <ul class="activity-list">
+            @for (entry of recentActivity(); track entry.id) {
+              <li class="activity-list__item">
+                <mat-icon class="activity-list__icon">history</mat-icon>
+                <span class="activity-list__text">
+                  <strong>{{ entry.actor_name || 'System' }}</strong> {{ entry.verb }}
+                </span>
+                <span class="activity-list__time">{{ entry.created_at | date: 'short' }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
     }
   </div>
 } @else {

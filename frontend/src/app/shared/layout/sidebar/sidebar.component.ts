@@ -24,5 +24,6 @@ export class SidebarComponent {
     { label: 'Maintenance', icon: 'build', route: '/maintenance' },
     { label: 'Vendors', icon: 'handyman', route: '/vendors' },
     { label: 'Documents', icon: 'folder', route: '/documents' },
+    { label: 'Activity', icon: 'history', route: '/activity' },
   ];
 }

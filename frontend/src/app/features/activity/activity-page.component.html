@@ -1,0 +1,47 @@
+<div class="activity-page">
+  <header class="activity-page__header">
+    <div>
+      <h1 class="activity-page__title">Activity</h1>
+      <p class="activity-page__subtitle">A running record of what's happened across your organization.</p>
+    </div>
+  </header>
+
+  <div class="activity-page__toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Filter</mat-label>
+      <mat-select [formControl]="targetTypeControl">
+        @for (option of targetTypeOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (isLoading()) {
+    <div class="activity-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else if (entries().length === 0) {
+    <div class="activity-page__empty">Nothing to show yet.</div>
+  } @else {
+    <ol class="activity-timeline">
+      @for (entry of entries(); track entry.id) {
+        <li
+          class="activity-timeline__item"
+          [class.activity-timeline__item--clickable]="entry.target_link"
+          (click)="open(entry)"
+        >
+          <span class="activity-timeline__icon">
+            <mat-icon>{{ iconFor(entry.target_type) }}</mat-icon>
+          </span>
+          <span class="activity-timeline__content">
+            <span class="activity-timeline__text">
+              <strong>{{ entry.actor_name || 'System' }}</strong> {{ entry.verb }}
+            </span>
+            <span class="activity-timeline__time">{{ entry.created_at | date: 'medium' }}</span>
+          </span>
+        </li>
+      }
+    </ol>
+  }
+</div>

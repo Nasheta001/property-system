@@ -80,6 +80,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/documents/documents-page.component').then((m) => m.DocumentsPageComponent),
       },
+      {
+        path: 'activity',
+        loadComponent: () =>
+          import('./features/activity/activity-page.component').then((m) => m.ActivityPageComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
