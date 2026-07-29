@@ -1,0 +1,70 @@
+<div class="properties-page">
+  <header class="properties-page__header">
+    <div>
+      <h1 class="properties-page__title">Properties</h1>
+      <p class="properties-page__subtitle">Your portfolio, from properties down to individual units.</p>
+    </div>
+    <button mat-flat-button class="properties-page__add" (click)="openCreatePropertyDialog()">
+      <mat-icon>add</mat-icon>
+      Add property
+    </button>
+  </header>
+
+  @if (isLoading()) {
+    <div class="properties-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else if (rows().length === 0) {
+    <div class="properties-page__empty">No properties yet. Add your first property to get started.</div>
+  } @else {
+    <mat-accordion class="properties-page__list" multi>
+      @for (row of rows(); track row.property.id) {
+        <mat-expansion-panel (opened)="loadBuildings(row)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ row.property.name }}</mat-panel-title>
+            <mat-panel-description>
+              {{ row.property.city || row.property.property_type.replace('_', ' ') }} &middot;
+              {{ row.property.building_count }} building{{ row.property.building_count === 1 ? '' : 's' }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="properties-page__toolbar">
+            <button mat-icon-button (click)="openEditPropertyDialog(row, $event)" aria-label="Edit property">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteProperty(row, $event)" aria-label="Delete property">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <span class="properties-page__spacer"></span>
+            <button mat-stroked-button (click)="openCreateBuildingDialog(row, $event)">
+              <mat-icon>add</mat-icon>
+              Add building
+            </button>
+          </div>
+
+          @if (row.property.description) {
+            <p class="properties-page__description">{{ row.property.description }}</p>
+          }
+
+          @if (row.isLoading) {
+            <div class="properties-page__panel-loading">
+              <mat-spinner diameter="24" />
+            </div>
+          } @else if (row.buildings.length === 0) {
+            <p class="properties-page__panel-empty">No buildings yet.</p>
+          } @else {
+            <mat-accordion class="properties-page__buildings">
+              @for (building of row.buildings; track building.id) {
+                <app-building-panel
+                  [building]="building"
+                  (updated)="onBuildingUpdated(row, $event)"
+                  (deleted)="onBuildingDeleted(row, $event)"
+                />
+              }
+            </mat-accordion>
+          }
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  }
+</div>

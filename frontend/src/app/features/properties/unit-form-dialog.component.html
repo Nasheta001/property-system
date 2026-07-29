@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>{{ data.unit ? 'Edit unit' : 'Add unit' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="unit-form">
+    <div class="unit-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>Unit number</mat-label>
+        <input matInput formControlName="unit_number" placeholder="e.g. A101" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="unit_type">
+          <mat-option value="studio">Studio</mat-option>
+          <mat-option value="one_bedroom">1 Bedroom</mat-option>
+          <mat-option value="two_bedroom">2 Bedroom</mat-option>
+          <mat-option value="three_bedroom">3 Bedroom</mat-option>
+          <mat-option value="penthouse">Penthouse</mat-option>
+          <mat-option value="office">Office</mat-option>
+          <mat-option value="shop">Shop</mat-option>
+          <mat-option value="other">Other</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="unit-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>Bedrooms</mat-label>
+        <input matInput type="number" formControlName="bedrooms" min="0" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Bathrooms</mat-label>
+        <input matInput type="number" formControlName="bathrooms" min="0" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Size (sqm)</mat-label>
+        <input matInput type="number" formControlName="size_sqm" />
+      </mat-form-field>
+    </div>
+
+    <div class="unit-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>Rent amount</mat-label>
+        <input matInput type="number" formControlName="rent_amount" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Deposit amount</mat-label>
+        <input matInput type="number" formControlName="deposit_amount" />
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button class="unit-form__submit" (click)="submit()">
+    {{ data.unit ? 'Save changes' : 'Add unit' }}
+  </button>
+</mat-dialog-actions>

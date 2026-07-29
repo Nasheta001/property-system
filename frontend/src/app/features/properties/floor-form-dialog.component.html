@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>{{ data.floor ? 'Edit floor' : 'Add floor' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="floor-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Floor number</mat-label>
+      <input matInput type="number" formControlName="number" />
+      <mat-hint>0 for ground floor, negative for basement levels.</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Label (optional)</mat-label>
+      <input matInput formControlName="name" placeholder="e.g. Ground Floor" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button class="floor-form__submit" (click)="submit()">
+    {{ data.floor ? 'Save changes' : 'Add floor' }}
+  </button>
+</mat-dialog-actions>

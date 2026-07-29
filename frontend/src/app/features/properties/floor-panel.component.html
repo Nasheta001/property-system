@@ -1,0 +1,60 @@
+<mat-expansion-panel (opened)="loadUnits()">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{ floor().name || 'Floor ' + floor().number }}</mat-panel-title>
+    <mat-panel-description>
+      {{ floor().unit_count }} unit{{ floor().unit_count === 1 ? '' : 's' }}
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div class="floor-panel__toolbar">
+    <button mat-icon-button (click)="editFloor($event)" aria-label="Edit floor">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button (click)="deleteFloor($event)" aria-label="Delete floor">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <span class="floor-panel__spacer"></span>
+    <button mat-stroked-button (click)="openCreateUnitDialog()">
+      <mat-icon>add</mat-icon>
+      Add unit
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <div class="floor-panel__loading">
+      <mat-spinner diameter="24" />
+    </div>
+  } @else if (units().length === 0) {
+    <p class="floor-panel__empty">No units on this floor yet.</p>
+  } @else {
+    <div class="unit-table">
+      <div class="unit-table__row unit-table__row--head">
+        <span>Unit</span>
+        <span>Type</span>
+        <span>Status</span>
+        <span>Rent</span>
+        <span></span>
+      </div>
+      @for (unit of units(); track unit.id) {
+        <div class="unit-table__row">
+          <span class="unit-table__primary">{{ unit.unit_number }}</span>
+          <span class="unit-table__secondary">{{ unit.unit_type.replace('_', ' ') }}</span>
+          <span>
+            <span class="status-badge" [class]="'status-badge--' + (unit.status === 'vacant' ? 'info' : unit.status === 'occupied' ? 'success' : 'warning')">
+              {{ unit.status.replace('_', ' ') }}
+            </span>
+          </span>
+          <span>{{ unit.rent_amount }}</span>
+          <span class="unit-table__actions">
+            <button mat-icon-button (click)="openEditUnitDialog(unit)" aria-label="Edit unit">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteUnit(unit)" aria-label="Delete unit">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+        </div>
+      }
+    </div>
+  }
+</mat-expansion-panel>

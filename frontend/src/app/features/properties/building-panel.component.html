@@ -1,0 +1,36 @@
+<mat-expansion-panel (opened)="loadFloors()">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{ building().name }}</mat-panel-title>
+    <mat-panel-description>
+      {{ building().floor_count }} floor{{ building().floor_count === 1 ? '' : 's' }}
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div class="building-panel__toolbar">
+    <button mat-icon-button (click)="editBuilding($event)" aria-label="Edit building">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button (click)="deleteBuilding($event)" aria-label="Delete building">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <span class="building-panel__spacer"></span>
+    <button mat-stroked-button (click)="openCreateFloorDialog()">
+      <mat-icon>add</mat-icon>
+      Add floor
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <div class="building-panel__loading">
+      <mat-spinner diameter="24" />
+    </div>
+  } @else if (floors().length === 0) {
+    <p class="building-panel__empty">No floors in this building yet.</p>
+  } @else {
+    <mat-accordion class="building-panel__floors">
+      @for (floor of floors(); track floor.id) {
+        <app-floor-panel [floor]="floor" (updated)="onFloorUpdated($event)" (deleted)="onFloorDeleted($event)" />
+      }
+    </mat-accordion>
+  }
+</mat-expansion-panel>

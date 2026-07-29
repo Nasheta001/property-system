@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>{{ data.building ? 'Edit building' : 'Add building' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="building-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Building name</mat-label>
+      <input matInput formControlName="name" placeholder="e.g. Block A" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Code (optional)</mat-label>
+      <input matInput formControlName="code" placeholder="e.g. A" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button class="building-form__submit" (click)="submit()">
+    {{ data.building ? 'Save changes' : 'Add building' }}
+  </button>
+</mat-dialog-actions>

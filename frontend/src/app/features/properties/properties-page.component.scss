@@ -1,0 +1,62 @@
+@use '../../shared/styles/data-table' as dt;
+
+.properties-page {
+  @include dt.page;
+  max-width: 900px;
+
+  &__header {
+    @include dt.page-header;
+  }
+
+  &__title {
+    @include dt.page-title;
+  }
+
+  &__subtitle {
+    @include dt.page-subtitle;
+  }
+
+  &__add {
+    background-color: var(--accent) !important;
+    color: var(--accent-contrast) !important;
+    white-space: nowrap;
+  }
+
+  &__loading {
+    @include dt.loading-state;
+  }
+
+  &__empty {
+    @include dt.empty-state;
+  }
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 0 12px;
+  }
+
+  &__spacer {
+    flex: 1;
+  }
+
+  &__description {
+    margin: 0 0 16px;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+
+  &__panel-loading {
+    display: flex;
+    justify-content: center;
+    padding: 16px 0;
+  }
+
+  &__panel-empty {
+    margin: 0;
+    padding: 12px 0;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+}

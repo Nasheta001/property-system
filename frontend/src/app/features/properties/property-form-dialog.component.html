@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>{{ property ? 'Edit property' : 'Add property' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="property-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Property name</mat-label>
+      <input matInput formControlName="name" placeholder="e.g. Green Apartments" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="property_type">
+        <mat-option value="residential">Residential</mat-option>
+        <mat-option value="commercial">Commercial</mat-option>
+        <mat-option value="mixed_use">Mixed Use</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Address</mat-label>
+      <input matInput formControlName="address" />
+    </mat-form-field>
+
+    <div class="property-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <input matInput formControlName="city" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Country</mat-label>
+        <input matInput formControlName="country" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button class="property-form__submit" (click)="submit()">
+    {{ property ? 'Save changes' : 'Add property' }}
+  </button>
+</mat-dialog-actions>

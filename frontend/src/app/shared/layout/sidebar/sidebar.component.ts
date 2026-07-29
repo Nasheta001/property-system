@@ -17,6 +17,7 @@ interface NavItem {
 export class SidebarComponent {
   protected readonly navItems: NavItem[] = [
     { label: 'Dashboard', icon: 'space_dashboard', route: '/dashboard' },
+    { label: 'Properties', icon: 'apartment', route: '/properties' },
     { label: 'Tenants', icon: 'groups', route: '/tenants' },
     { label: 'Leases', icon: 'description', route: '/leases' },
     { label: 'Payments', icon: 'payments', route: '/payments' },

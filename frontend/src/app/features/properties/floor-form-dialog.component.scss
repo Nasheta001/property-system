@@ -1,0 +1,21 @@
+.floor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 360px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.floor-form__submit {
+  background-color: var(--accent) !important;
+  color: var(--accent-contrast) !important;
+}
+
+@media (max-width: 560px) {
+  .floor-form {
+    min-width: 0;
+  }
+}
