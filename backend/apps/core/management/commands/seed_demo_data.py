@@ -6,6 +6,8 @@ from django.utils import timezone
 
 from apps.leases.models import Lease
 from apps.leases.services import activate_lease
+from apps.maintenance.models import MaintenanceRequest, Vendor
+from apps.maintenance.services import assign, verify
 from apps.organizations.models import Membership, Organization
 from apps.payments.models import Payment
 from apps.payments.services import mark_payment_paid
@@ -175,6 +177,40 @@ class Command(BaseCommand):
                     created_by=owner,
                 )
                 mark_payment_paid(payment, owner, provider_reference="DEMO-MPESA-REF")
+
+        # --- Maintenance ----------------------------------------------------
+        vendor, _ = Vendor.objects.get_or_create(
+            organization=organization,
+            name="FixIt Plumbing & Electrical",
+            defaults={
+                "contact_person": "Samuel Kamau",
+                "phone_number": "+254700555666",
+                "email": "samuel@fixit.demo",
+                "specialty": "Plumbing & Electrical",
+                "created_by": owner,
+            },
+        )
+
+        first_occupied_unit = occupied_units[0] if occupied_units else None
+        if first_occupied_unit is not None and not MaintenanceRequest.objects.filter(
+            organization=organization, unit=first_occupied_unit
+        ).exists():
+            tenant_for_unit = TenantProfile.objects.filter(
+                organization=organization, leases__unit=first_occupied_unit
+            ).first()
+            request_obj = MaintenanceRequest.objects.create(
+                organization=organization,
+                unit=first_occupied_unit,
+                tenant=tenant_for_unit,
+                reported_by=manager,
+                title="Leaking kitchen tap",
+                description="The kitchen tap has been dripping constantly for two days.",
+                category=MaintenanceRequest.Category.PLUMBING,
+                priority=MaintenanceRequest.Priority.MEDIUM,
+                created_by=manager,
+            )
+            request_obj = verify(request_obj, owner)
+            assign(request_obj, owner, vendor)
 
         self.stdout.write(self.style.SUCCESS("Demo data seeded successfully."))
         self.stdout.write(f"  Organization: {organization.name} ({organization.slug})")

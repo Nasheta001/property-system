@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { forkJoin } from 'rxjs';
 
 import { LeasesService } from '../../core/services/leases.service';
+import { MaintenanceService } from '../../core/services/maintenance.service';
 import { OrganizationService } from '../../core/services/organization.service';
 import { PaymentsService } from '../../core/services/payments.service';
 import { PropertiesService } from '../../core/services/properties.service';
@@ -30,6 +31,7 @@ export class DashboardPageComponent implements OnInit {
   private readonly propertiesService = inject(PropertiesService);
   private readonly leasesService = inject(LeasesService);
   private readonly paymentsService = inject(PaymentsService);
+  private readonly maintenanceService = inject(MaintenanceService);
   private readonly fb = inject(FormBuilder);
   protected readonly organizationService = inject(OrganizationService);
 
@@ -40,6 +42,7 @@ export class DashboardPageComponent implements OnInit {
   protected readonly occupiedUnitsCount = signal(0);
   protected readonly activeLeasesCount = signal(0);
   protected readonly paidPaymentsCount = signal(0);
+  protected readonly reportedIssuesCount = signal(0);
   protected readonly recentProperties = signal<Property[]>([]);
 
   protected readonly isCreatingOrg = signal(false);
@@ -67,8 +70,9 @@ export class DashboardPageComponent implements OnInit {
       occupied: this.propertiesService.listUnits({ page_size: 1, status: 'occupied' }),
       activeLeases: this.leasesService.list({ page_size: 1, status: 'active' }),
       paidPayments: this.paymentsService.list({ page_size: 1, status: 'paid' }),
+      reportedIssues: this.maintenanceService.listRequests({ page_size: 1, status: 'reported' }),
     }).subscribe({
-      next: ({ properties, units, vacant, occupied, activeLeases, paidPayments }) => {
+      next: ({ properties, units, vacant, occupied, activeLeases, paidPayments, reportedIssues }) => {
         this.propertiesCount.set(properties.count);
         this.recentProperties.set(properties.results);
         this.totalUnitsCount.set(units.count);
@@ -76,6 +80,7 @@ export class DashboardPageComponent implements OnInit {
         this.occupiedUnitsCount.set(occupied.count);
         this.activeLeasesCount.set(activeLeases.count);
         this.paidPaymentsCount.set(paidPayments.count);
+        this.reportedIssuesCount.set(reportedIssues.count);
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false),

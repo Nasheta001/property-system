@@ -113,6 +113,19 @@ def tenant_profile(organization, owner_user):
 
 
 @pytest.fixture
+def vendor(organization, owner_user):
+    from apps.maintenance.models import Vendor
+
+    return Vendor.objects.create(
+        organization=organization,
+        name="FixIt Plumbing",
+        phone_number="+254700999888",
+        specialty="Plumbing",
+        created_by=owner_user,
+    )
+
+
+@pytest.fixture
 def active_lease(unit, tenant_profile, owner_user):
     from apps.leases.models import Lease
     from apps.leases.services import activate_lease

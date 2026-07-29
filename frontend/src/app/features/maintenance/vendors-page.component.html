@@ -1,0 +1,49 @@
+<div class="vendors-page">
+  <header class="vendors-page__header">
+    <div>
+      <h1 class="vendors-page__title">Vendors</h1>
+      <p class="vendors-page__subtitle">Contractors you dispatch maintenance work to.</p>
+    </div>
+    <button mat-flat-button class="vendors-page__add" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Add vendor
+    </button>
+  </header>
+
+  @if (isLoading()) {
+    <div class="vendors-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else if (vendors().length === 0) {
+    <div class="vendors-page__empty">No vendors yet. Add your first contractor to get started.</div>
+  } @else {
+    <div class="data-table">
+      <div class="data-table__row data-table__row--head">
+        <span>Name</span>
+        <span>Contact</span>
+        <span>Specialty</span>
+        <span></span>
+      </div>
+      @for (vendor of vendors(); track vendor.id) {
+        <div class="data-table__row">
+          <span class="data-table__primary">{{ vendor.name }}</span>
+          <span class="data-table__secondary">
+            {{ vendor.contact_person }}
+            @if (vendor.phone_number) {
+              <br />{{ vendor.phone_number }}
+            }
+          </span>
+          <span>{{ vendor.specialty || '—' }}</span>
+          <span class="data-table__actions">
+            <button mat-icon-button (click)="openEditDialog(vendor)" aria-label="Edit vendor">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteVendor(vendor)" aria-label="Delete vendor">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

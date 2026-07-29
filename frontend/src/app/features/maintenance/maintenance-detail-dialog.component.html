@@ -1,0 +1,141 @@
+<h2 mat-dialog-title>{{ request().title }}</h2>
+
+<mat-dialog-content class="detail">
+  <div class="detail__meta">
+    <span class="detail__meta-item"><strong>Unit</strong> {{ request().unit_number }}</span>
+    <span class="detail__meta-item"><strong>Tenant</strong> {{ request().tenant_name || '—' }}</span>
+    <span class="detail__meta-item"><strong>Category</strong> {{ request().category.replace('_', ' ') }}</span>
+    <span class="detail__meta-item"><strong>Priority</strong> {{ request().priority }}</span>
+    <span class="detail__meta-item"><strong>Status</strong> {{ request().status.replace('_', ' ') }}</span>
+    @if (request().vendor_name) {
+      <span class="detail__meta-item"><strong>Vendor</strong> {{ request().vendor_name }}</span>
+    }
+  </div>
+
+  @if (request().description) {
+    <p class="detail__description">{{ request().description }}</p>
+  }
+
+  <div class="detail__actions">
+    @if (request().status === 'reported') {
+      <button mat-flat-button class="detail__action" [disabled]="isSubmitting()" (click)="verify()">Verify</button>
+    }
+
+    @if (request().status === 'verified') {
+      <form [formGroup]="assignForm" class="detail__inline-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Assign vendor</mat-label>
+          <mat-select formControlName="vendor">
+            @for (vendor of vendors(); track vendor.id) {
+              <mat-option [value]="vendor.id">{{ vendor.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <button mat-flat-button class="detail__action" [disabled]="isSubmitting()" (click)="assignVendor()">
+          Assign
+        </button>
+      </form>
+    }
+
+    @if (request().status === 'assigned') {
+      <button mat-flat-button class="detail__action" [disabled]="isSubmitting()" (click)="accept()">
+        Mark vendor accepted
+      </button>
+    }
+
+    @if (request().status === 'accepted' || request().status === 'waiting_parts') {
+      <button mat-flat-button class="detail__action" [disabled]="isSubmitting()" (click)="startProgress()">
+        Start progress
+      </button>
+    }
+
+    @if (request().status === 'in_progress') {
+      <button mat-stroked-button [disabled]="isSubmitting()" (click)="waitForParts()">Waiting on parts</button>
+      <button mat-flat-button class="detail__action" [disabled]="isSubmitting()" (click)="complete()">
+        Mark complete
+      </button>
+    }
+
+    @if (request().status === 'completed') {
+      <button mat-flat-button class="detail__action" [disabled]="isSubmitting()" (click)="review()">
+        Review work
+      </button>
+    }
+
+    @if (request().status === 'reviewed') {
+      <form [formGroup]="closeForm" class="detail__inline-form detail__inline-form--stacked">
+        <mat-form-field appearance="outline">
+          <mat-label>Closure notes</mat-label>
+          <textarea matInput formControlName="closure_notes" rows="2"></textarea>
+        </mat-form-field>
+        <button mat-flat-button class="detail__action" [disabled]="isSubmitting()" (click)="closeRequest()">
+          Close request
+        </button>
+      </form>
+    }
+
+    @if (request().status === 'closed' && request().closure_notes) {
+      <p class="detail__closure">Closed: {{ request().closure_notes }}</p>
+    }
+  </div>
+
+  @if (isLoading()) {
+    <div class="detail__loading">
+      <mat-spinner diameter="28" />
+    </div>
+  } @else {
+    <section class="detail__section">
+      <h3 class="detail__section-title">Attachments</h3>
+      @if (attachments().length === 0) {
+        <p class="detail__empty">No photos or videos yet.</p>
+      } @else {
+        <ul class="detail__attachments">
+          @for (attachment of attachments(); track attachment.id) {
+            <li>
+              <a [href]="attachment.file" target="_blank" rel="noopener">{{ attachment.caption || 'View file' }}</a>
+              <span class="detail__attachment-meta">by {{ attachment.uploaded_by_name || 'Unknown' }}</span>
+            </li>
+          }
+        </ul>
+      }
+      <div class="detail__upload">
+        <input type="file" accept="image/*,video/*" (change)="onFileSelected($event)" />
+        <mat-form-field appearance="outline" class="detail__caption-field">
+          <mat-label>Caption (optional)</mat-label>
+          <input matInput [formControl]="attachmentCaption" />
+        </mat-form-field>
+        <button mat-stroked-button [disabled]="!selectedFile" (click)="uploadAttachment()">
+          <mat-icon>attach_file</mat-icon>
+          Upload
+        </button>
+      </div>
+    </section>
+
+    <section class="detail__section">
+      <h3 class="detail__section-title">Comments</h3>
+      @if (comments().length === 0) {
+        <p class="detail__empty">No comments yet.</p>
+      } @else {
+        <ul class="detail__comments">
+          @for (comment of comments(); track comment.id) {
+            <li>
+              <span class="detail__comment-author">{{ comment.author_name || 'Unknown' }}</span>
+              <p class="detail__comment-body">{{ comment.body }}</p>
+            </li>
+          }
+        </ul>
+      }
+      <form [formGroup]="commentForm" class="detail__comment-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Add a comment</mat-label>
+          <textarea matInput formControlName="body" rows="2"></textarea>
+        </mat-form-field>
+        <button mat-stroked-button (click)="addComment()">Post comment</button>
+      </form>
+    </section>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Close</button>
+</mat-dialog-actions>

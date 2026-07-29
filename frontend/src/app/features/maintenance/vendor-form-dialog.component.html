@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>{{ vendor ? 'Edit vendor' : 'Add vendor' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="vendor-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Company / vendor name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <div class="vendor-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>Contact person</mat-label>
+        <input matInput formControlName="contact_person" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Specialty</mat-label>
+        <input matInput formControlName="specialty" placeholder="e.g. Plumbing" />
+      </mat-form-field>
+    </div>
+
+    <div class="vendor-form__row">
+      <mat-form-field appearance="outline">
+        <mat-label>Phone number</mat-label>
+        <input matInput formControlName="phone_number" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+        @if (form.controls.email.hasError('email')) {
+          <mat-error>Enter a valid email.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button class="vendor-form__submit" (click)="submit()">
+    {{ vendor ? 'Save changes' : 'Add vendor' }}
+  </button>
+</mat-dialog-actions>

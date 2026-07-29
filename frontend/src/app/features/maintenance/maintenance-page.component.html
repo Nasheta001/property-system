@@ -1,0 +1,70 @@
+<div class="maintenance-page">
+  <header class="maintenance-page__header">
+    <div>
+      <h1 class="maintenance-page__title">Maintenance</h1>
+      <p class="maintenance-page__subtitle">Reported issues across your portfolio.</p>
+    </div>
+    <button mat-flat-button class="maintenance-page__add" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Report issue
+    </button>
+  </header>
+
+  <div class="maintenance-page__toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [formControl]="statusControl">
+        @for (option of statusOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Priority</mat-label>
+      <mat-select [formControl]="priorityControl">
+        @for (option of priorityOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (isLoading()) {
+    <div class="maintenance-page__loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else if (requests().length === 0) {
+    <div class="maintenance-page__empty">No maintenance requests match this filter.</div>
+  } @else {
+    <div class="data-table">
+      <div class="data-table__row data-table__row--head">
+        <span>Issue</span>
+        <span>Unit</span>
+        <span>Priority</span>
+        <span>Status</span>
+        <span></span>
+      </div>
+      @for (request of requests(); track request.id) {
+        <div class="data-table__row data-table__row--clickable" (click)="openDetail(request)">
+          <span class="data-table__primary">{{ request.title }}</span>
+          <span>{{ request.unit_number }}</span>
+          <span>
+            <span class="status-badge" [class]="'status-badge--' + priorityTone(request.priority)">
+              {{ request.priority }}
+            </span>
+          </span>
+          <span>
+            <span class="status-badge" [class]="'status-badge--' + statusTone(request.status)">
+              {{ request.status.replace('_', ' ') }}
+            </span>
+          </span>
+          <span class="data-table__actions">
+            <button mat-icon-button (click)="deleteRequest(request, $event)" aria-label="Delete request" title="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

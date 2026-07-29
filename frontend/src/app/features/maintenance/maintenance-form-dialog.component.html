@@ -1,0 +1,72 @@
+<h2 mat-dialog-title>Report an issue</h2>
+
+<mat-dialog-content>
+  @if (isLoadingOptions()) {
+    <div class="maintenance-form__loading">
+      <mat-spinner diameter="28" />
+    </div>
+  } @else {
+    <form [formGroup]="form" class="maintenance-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Unit</mat-label>
+        <mat-select formControlName="unit">
+          @for (unit of units(); track unit.id) {
+            <mat-option [value]="unit.id">{{ unit.unit_number }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tenant (optional)</mat-label>
+        <mat-select formControlName="tenant">
+          <mat-option value="">None / common area</mat-option>
+          @for (tenant of tenants(); track tenant.id) {
+            <mat-option [value]="tenant.id">{{ tenant.full_name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="e.g. Leaking kitchen tap" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="3"></textarea>
+      </mat-form-field>
+
+      <div class="maintenance-form__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            <mat-option value="plumbing">Plumbing</mat-option>
+            <mat-option value="electrical">Electrical</mat-option>
+            <mat-option value="appliance">Appliance</mat-option>
+            <mat-option value="structural">Structural</mat-option>
+            <mat-option value="hvac">HVAC</mat-option>
+            <mat-option value="pest_control">Pest Control</mat-option>
+            <mat-option value="other">Other</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Priority</mat-label>
+          <mat-select formControlName="priority">
+            <mat-option value="low">Low</mat-option>
+            <mat-option value="medium">Medium</mat-option>
+            <mat-option value="high">High</mat-option>
+            <mat-option value="urgent">Urgent</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button class="maintenance-form__submit" [disabled]="isLoadingOptions()" (click)="submit()">
+    Report issue
+  </button>
+</mat-dialog-actions>

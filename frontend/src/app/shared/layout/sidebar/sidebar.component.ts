@@ -20,5 +20,7 @@ export class SidebarComponent {
     { label: 'Tenants', icon: 'groups', route: '/tenants' },
     { label: 'Leases', icon: 'description', route: '/leases' },
     { label: 'Payments', icon: 'payments', route: '/payments' },
+    { label: 'Maintenance', icon: 'build', route: '/maintenance' },
+    { label: 'Vendors', icon: 'handyman', route: '/vendors' },
   ];
 }

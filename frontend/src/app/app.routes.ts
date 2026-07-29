@@ -60,6 +60,16 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/payments/payments-page.component').then((m) => m.PaymentsPageComponent),
       },
+      {
+        path: 'maintenance',
+        loadComponent: () =>
+          import('./features/maintenance/maintenance-page.component').then((m) => m.MaintenancePageComponent),
+      },
+      {
+        path: 'vendors',
+        loadComponent: () =>
+          import('./features/maintenance/vendors-page.component').then((m) => m.VendorsPageComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
