@@ -5,6 +5,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { GlobalSearchComponent } from '../../ui/global-search/global-search.component';
 import { NotificationBellComponent } from '../../ui/notification-bell/notification-bell.component';
 import { OrgSwitcherComponent } from '../../ui/org-switcher/org-switcher.component';
 import { ThemeToggleComponent } from '../../ui/theme-toggle/theme-toggle.component';
@@ -15,6 +16,7 @@ import { ThemeToggleComponent } from '../../ui/theme-toggle/theme-toggle.compone
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    GlobalSearchComponent,
     NotificationBellComponent,
     OrgSwitcherComponent,
     ThemeToggleComponent,

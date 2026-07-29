@@ -1,16 +1,23 @@
 .topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 20px;
   height: 60px;
   padding: 0 24px;
   background-color: var(--surface);
   border-bottom: 1px solid var(--border-subtle);
 
+  &__search {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
   &__actions {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-shrink: 0;
   }
 
   &__avatar {
@@ -47,5 +54,11 @@
     margin: 2px 0 0;
     font-size: 0.75rem;
     color: var(--text-muted);
+  }
+}
+
+@media (max-width: 700px) {
+  .topbar__search {
+    display: none;
   }
 }

@@ -1,0 +1,25 @@
+<mat-form-field appearance="outline" class="global-search">
+  <mat-icon matPrefix>search</mat-icon>
+  <input
+    matInput
+    type="text"
+    placeholder="Search properties, tenants, payments..."
+    [formControl]="control"
+    [matAutocomplete]="auto"
+  />
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelected($event)">
+    @if (results().length > 0) {
+      @for (result of results(); track result.id) {
+        <mat-option [value]="result">
+          <mat-icon class="global-search__option-icon">{{ iconFor(result.type) }}</mat-icon>
+          <span class="global-search__option-label">{{ result.label }}</span>
+          @if (result.sublabel) {
+            <span class="global-search__option-sublabel">{{ result.sublabel }}</span>
+          }
+        </mat-option>
+      }
+    } @else if (control.value.trim().length >= 2 && !isSearching()) {
+      <mat-option disabled>No results for "{{ control.value }}"</mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>
